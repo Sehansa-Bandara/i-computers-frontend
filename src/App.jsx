@@ -7,7 +7,7 @@ import RegisterPage from './pages/registerPage.jsx'
 import AdminPage from './pages/adminPage.jsx'
 import TestPage from './pages/testPage.jsx'
 import { Routes, Route } from 'react-router-dom';
-
+import {Toaster} from 'react-hot-toast';
 
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
 
   return (
     <div className="w-full h-screen">
-
+   <Toaster position='top-right'/>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
