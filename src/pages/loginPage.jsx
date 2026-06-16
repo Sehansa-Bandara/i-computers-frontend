@@ -2,12 +2,15 @@ import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import api from "../lib/api";
 
 export default function LoginPage() {
+
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [password, setPassword] = useState(""); 
+    const navigate= useNavigate();
 
     function handleLogin() {
         api.post("/users/login", {
@@ -23,6 +26,16 @@ export default function LoginPage() {
             // browser local storage to store the token and isAdmin
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("isAdmin", res.data.isAdmin); 
+
+            if (res.data.isAdmin) {
+                // redirect to admin dashboard
+               // window.location.href = "/admin/dashboard";
+                navigate("/admin/dashboard");
+            } else {
+                // redirect to user dashboard
+                // window.location.href = "/user/dashboard";
+                navigate("/user/dashboard");
+            }
         })
         .catch((err) => {
             console.log(err);
@@ -41,6 +54,7 @@ export default function LoginPage() {
                 
                 <label className="w-full mt-5 text-lg text-secondary-color font-semibold">Email</label>
                 <input
+                value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     type="email" 
                     className="w-full h-[40px] rounded-lg outline-none border-2 border-accent-color/50 focus:border-accent-color placeholder:text-secondary-color px-3 text-white" 
@@ -50,6 +64,7 @@ export default function LoginPage() {
                 
                 <label className="w-full mt-5 text-lg text-secondary-color font-semibold">Password</label>
                 <input
+                value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     type="password" 
                     className="w-full h-[40px] rounded-lg outline-none border-2 border-accent-color/50 focus:border-accent-color placeholder:text-secondary-color px-3 text-white" 
