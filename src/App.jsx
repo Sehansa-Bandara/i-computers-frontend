@@ -22,7 +22,6 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/admin/*" element={<AdminPage />} />
         <Route path="/test" element={<TestPage />} />
-        
       </Routes>
       
       
