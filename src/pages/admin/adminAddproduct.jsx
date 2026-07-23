@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { uploadMedia } from "../../lib/uploadMedia.js";
+import uploadMedia from "../../lib/uploadMedia.js";
 import { CiCircleInfo } from "react-icons/ci";
-
-
+import api from "../../lib/api.js";
+import LoadingAnimation from "../../components/loadingAnimation.jsx";
 
 export default function AddProductForm() {
   const [productId, setProductId] = useState("");
@@ -20,72 +20,63 @@ export default function AddProductForm() {
   const [brand, setBrand] = useState("");
   const [model, setModel] = useState("");
   const [images, setImages] = useState([]);
+  const[loading, setLoading] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   async function handleSave() {
-    const token = localStorage.getItem("token")
+    setLoading(true);
+    const token = localStorage.getItem("token");
     if (token == null) {
-      toast.error("You are not logged in")
-      navigate("/login")
-      return
+      toast.error("You are not logged in");
+      navigate("/login");
+      return;
     }
-    const productData = {
-      productId: productId,
-      name: name,
-      altName: [],
-      description: description,
-      image: [],
-      price: price,
-      stock: stock,
-      labledPrice: labledPrice,
-      isAvailable: isAvailable,
-      category: category,
-      brand: brand,
-      model: model,
-
-    }
-
 
     try {
-      const imageUploadPromises = []
+      const imageUploadPromises = [];
 
       for (let i = 0; i < images.length; i++) {
-        imageUploadPromises[i] = uploadMedia(images[i])
-
-
+        imageUploadPromises[i] = uploadMedia(images[i]);
       }
-      console.log(imageUploadPromises)
-      productData.image = await Promise.all(imageUploadPromises)
-      //  const fasterUploadedImageUrl = await.Promise.race(imageUploadPromises)
 
-      productData.altNames = altName.split(",")
+      const imageUrls = await Promise.all(imageUploadPromises);
 
-      const res = await api.post("/products", productData,
-        {
-          headers: {
-            Authorization: "Bearer " + token
-          }
+      const productData = {
+        productId: productId,
+        name: name,
+        altNames: altName ? altName.split(",").map((s) => s.trim()) : [],
+        description: description,
+        images: imageUrls,
+        price: Number(price),
+        stock: Number(stock),
+        labledPrice: Number(labledPrice),
+        isAvailable: isAvailable === "true" || isAvailable === true,
+        category: category,
+        brand: brand,
+        model: model,
+      };
 
+      const res = await api.post("/products", productData, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
 
-        }
-
-
-      )
-      console.log(res)
-
-
+      console.log(res);
+      toast.success(res.data?.message || "Product created successfully");
+      navigate("/admin/products");
     } catch (err) {
-      console.log(err)
-      toast.error("Failed to add product")
+      setLoading(false);
+      console.log(err);
+      toast.error(err?.response?.data?.message || "Failed to add product");
     }
-
-
-
-
   }
   return (
+
     <div className="w-full max-h-full flex  flex-wrap p-4 item-start  gap-0 overflow-y-scroll">
+      {loading && <LoadingAnimation />}
+
 
       {<div className="w-full h-[100px] bg-white shadow-md rounded-md flex items-center p-4 justify-between mb-6">
         <h1 className="text-2xl font-semibold text-secondary-color">Add New Product</h1>

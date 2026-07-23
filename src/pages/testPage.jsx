@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { uploadMedia } from "../lib/uploadMedia";
 import { toast } from "react-hot-toast";
 
 
