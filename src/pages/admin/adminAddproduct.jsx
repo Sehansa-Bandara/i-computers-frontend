@@ -81,6 +81,7 @@ export default function AddProductForm() {
       {<div className="w-full h-[90px] bg-gradient-to-r from-blue-50 via-sky-50 to-indigo-50 border border-blue-200/70 shadow-sm rounded-xl flex items-center p-5 justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-blue-950 tracking-tight">Add New Product</h1>
+          
           <p className="text-xs text-blue-600/80 font-medium mt-0.5">Enter product specifications and catalog information</p>
         </div>
 
