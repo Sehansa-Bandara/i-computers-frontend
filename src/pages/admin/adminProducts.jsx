@@ -4,6 +4,7 @@ import { CiEdit, CiTrash } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import api from "../../lib/api.js";
+import DeleteProductModal from "../../components/deleteProductModal.jsx";
 
 const sampleProducts = [
   {
@@ -196,6 +197,49 @@ export default function AdminProducts() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  function handleDelete(productId) {
+    toast(
+      (t) => (
+        <div className="w-[250px] h-[150px] flex flex-col justify-center items-center gap-3">
+          <h1 className="text-lg font-semibold text-slate-800 text-center">
+            Are you sure you want to delete this product?
+          </h1>
+          <div className="flex gap-4">
+            <button
+              className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 cursor-pointer shadow-sm transition-all"
+              onClick={async () => {
+                toast.dismiss(t.id);
+                const token = localStorage.getItem("token");
+                try {
+                  await api.delete(`/products/${productId}`, {
+                    headers: {
+                      Authorization: `Bearer ${token}`
+                    }
+                  });
+                  toast.success("Product deleted successfully");
+                  fetchProducts();
+                } catch (error) {
+                  console.log(error);
+                }
+              }}
+            >
+              Yes
+            </button>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="bg-slate-600 text-white px-4 py-2 rounded-md hover:bg-slate-700 cursor-pointer shadow-sm transition-all"
+            >
+              No
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        position: "top-center",
+        duration: Infinity,
+      }
+    );
+  }
 
   // make a backend call to get all products
   // update the product variables value with response from backend
@@ -221,23 +265,6 @@ export default function AdminProducts() {
   useEffect(() => {
     fetchProducts();
   }, []);
-
-  const handleDelete = async (productId) => {
-    if (!window.confirm(`Are you sure you want to delete product ${productId}?`)) return;
-    try {
-      const token = localStorage.getItem("token");
-      await api.delete(`/products/${productId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      toast.success("Product deleted successfully");
-      setProducts((prev) => prev.filter((p) => p.productId !== productId));
-    } catch (err) {
-      console.error("Delete failed:", err);
-      toast.error(err?.response?.data?.message || "Failed to delete product");
-    }
-  };
 
   return (
     <div className="w-full h-full flex flex-col p-4 overflow-y-auto">
@@ -317,32 +344,30 @@ export default function AdminProducts() {
                     <td className="p-2">{item.model}</td>
                     <td className="p-2">
                       <span
-                        className={`px-2 py-1 text-xs rounded-full font-semibold ${
-                          item.isAvailable
-                            ? "bg-emerald-100 text-emerald-800"
-                            : "bg-rose-100 text-rose-800"
-                        }`}
+                        className={`px-2 py-1 text-xs rounded-full font-semibold ${item.isAvailable
+                          ? "bg-emerald-100 text-emerald-800"
+                          : "bg-rose-100 text-rose-800"
+                          }`}
                       >
                         {item.isAvailable ? "Available" : "Not available"}
                       </span>
                     </td>
                     <td className="p-2 text-slate-500">${item.labledPrice || item.price}</td>
                     <td className="p-2">
-                      <div className="flex gap-2 justify-center items-center">
-                        <button
-                          onClick={() => navigate("/admin/addproduct", { state: { product: item } })}
-                          className="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition-colors cursor-pointer text-lg"
+                      {/* icons only */}
+                      <div className="flex gap-2 justify-center items-center text-lg">
+                        <CiEdit
+                          className="hover:text-blue-600 cursor-pointer transition-colors"
                           title="Edit Product"
-                        >
-                          <CiEdit />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item.productId)}
-                          className="p-1.5 text-rose-600 hover:bg-rose-50 rounded transition-colors cursor-pointer text-lg"
+                          onClick={() => navigate("/admin/addproduct", { state: { product: item } })}
+                        />
+                        {/* <CiTrash
+                          className="hover:text-red-600 cursor-pointer transition-colors"
                           title="Delete Product"
-                        >
-                          <CiTrash />
-                        </button>
+                          onClick={() => handleDelete(item.productId)}
+                        /> */}
+                        {/* DELETE BUTTON USING MODAL  */}
+                        <DeleteProductModal />
                       </div>
                     </td>
                   </tr>

@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import uploadMedia from "../../lib/uploadMedia.js";
 import { CiCircleInfo } from "react-icons/ci";
 import api from "../../lib/api.js";
@@ -21,8 +20,26 @@ export default function AddProductForm() {
   const [model, setModel] = useState("");
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
+
+  useEffect(
+    () => {
+      api.get("/products").then((response) => {
+        if (isLoading) {
+          console.log(response.data);
+          setProducts(response.data);
+          setIsLoading(false);
+        }
+      });
+    },
+    [isLoading]
+  );
+  //Dependancy array
+  //make a backend call to get all products
+  //update the products variable's value with response from backend
 
   async function handleSave() {
     setLoading(true);
@@ -78,11 +95,17 @@ export default function AddProductForm() {
       {loading && <LoadingAnimation />}
 
 
-      {<div className="w-full h-[90px] bg-gradient-to-r from-blue-50 via-sky-50 to-indigo-50 border border-blue-200/70 shadow-sm rounded-xl flex items-center p-5 justify-between mb-6">
+      <div className="w-full h-[90px] bg-gradient-to-r from-blue-50 via-sky-50 to-indigo-50 border border-blue-200/70 shadow-sm rounded-xl flex items-center p-5 justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-blue-950 tracking-tight">Add New Product</h1>
-          
           <p className="text-xs text-blue-600/80 font-medium mt-0.5">Enter product specifications and catalog information</p>
+        </div>
+
+        <div className="flex flex-col justify-center items-center">
+          <span className="text-xs text-slate-600 font-medium">{products.length} products</span>
+          <button type="button" onClick={() => setIsLoading(true)} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 cursor-pointer shadow-sm transition-all active:scale-[0.98]">
+            Refresh
+          </button>
         </div>
 
         <div className="flex gap-3">
@@ -93,8 +116,8 @@ export default function AddProductForm() {
             Save
           </button>
         </div>
-
-      </div>}
+      </div>
+        
       <div className="w-[15%] flex flex-col h-[85px] p-2">
         <label className="text-slate-700 text-sm font-semibold mb-1.5">Product ID</label>
         <input type="text" value={productId} onChange={(e) => setProductId(e.target.value)} className="w-full h-[42px] rounded-lg border border-slate-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 bg-slate-50/50" />
@@ -167,7 +190,7 @@ export default function AddProductForm() {
         <input type="text" value={model} onChange={(e) => setModel(e.target.value)} className="w-full h-[42px] rounded-lg border border-slate-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 bg-slate-50/50" />
       </div>
 
-    </div>
+    </div >
 
 
 
