@@ -4,6 +4,7 @@ import { BsBox } from "react-icons/bs";
 import { FaRegUser } from "react-icons/fa";
 import AdminProducts from "./admin/adminProducts";
 import AddProductForm from "./admin/adminAddproduct";
+import AdminEditProductForm from "./admin/adminEditProductform";
 
 export default function AdminPage() {
   const location = useLocation();
@@ -35,11 +36,10 @@ export default function AdminPage() {
           <nav className="p-4 space-y-2 mt-2">
             <Link
               to="/admin"
-              className={`w-full flex items-center p-3.5 text-lg font-medium rounded-xl gap-3.5 transition-all duration-200 ${
-                isActive("/admin") && location.pathname === "/admin"
+              className={`w-full flex items-center p-3.5 text-lg font-medium rounded-xl gap-3.5 transition-all duration-200 ${isActive("/admin") && location.pathname === "/admin"
                   ? "bg-blue-600 text-white shadow-lg shadow-blue-600/40 font-semibold"
                   : "text-blue-100 hover:bg-blue-800/50 hover:text-white"
-              }`}
+                }`}
             >
               <GiShoppingCart className="text-2xl" />
               Orders
@@ -47,11 +47,10 @@ export default function AdminPage() {
 
             <Link
               to="/admin/products"
-              className={`w-full flex items-center p-3.5 text-lg font-medium rounded-xl gap-3.5 transition-all duration-200 ${
-                isActive("/admin/products") || location.pathname.includes("/admin/addproduct")
+              className={`w-full flex items-center p-3.5 text-lg font-medium rounded-xl gap-3.5 transition-all duration-200 ${isActive("/admin/products") || location.pathname.includes("/admin/addproduct")
                   ? "bg-blue-600 text-white shadow-lg shadow-blue-600/40 font-semibold"
                   : "text-blue-100 hover:bg-blue-800/50 hover:text-white"
-              }`}
+                }`}
             >
               <BsBox className="text-2xl" />
               Products
@@ -59,11 +58,10 @@ export default function AdminPage() {
 
             <Link
               to="/admin/users"
-              className={`w-full flex items-center p-3.5 text-lg font-medium rounded-xl gap-3.5 transition-all duration-200 ${
-                isActive("/admin/users")
+              className={`w-full flex items-center p-3.5 text-lg font-medium rounded-xl gap-3.5 transition-all duration-200 ${isActive("/admin/users")
                   ? "bg-blue-600 text-white shadow-lg shadow-blue-600/40 font-semibold"
                   : "text-blue-100 hover:bg-blue-800/50 hover:text-white"
-              }`}
+                }`}
             >
               <FaRegUser className="text-2xl" />
               Users
@@ -83,6 +81,7 @@ export default function AdminPage() {
           <Route path="/products" element={<AdminProducts />} />
           <Route path="/users" element={<h1 className="text-3xl font-bold text-slate-800">Users Page</h1>} />
           <Route path="/addproduct" element={<AddProductForm />} />
+          <Route path="/editproduct" element={<AdminEditProductForm />} />
         </Routes>
       </div>
     </div>

@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import api from "../../lib/api.js";
 import DeleteProductModal from "../../components/deleteProductModal.jsx";
+import { useLocation } from "react-router-dom";
+
 
 const sampleProducts = [
   {
@@ -356,11 +358,12 @@ export default function AdminProducts() {
                     <td className="p-2">
                       {/* icons only */}
                       <div className="flex gap-2 justify-center items-center text-lg">
-                        <CiEdit
-                          className="hover:text-blue-600 cursor-pointer transition-colors"
-                          title="Edit Product"
-                          onClick={() => navigate("/admin/addproduct", { state: { product: item } })}
-                        />
+                        <Link to="/admin/editproduct" state={item}>
+                          <CiEdit
+                            className="hover:text-blue-600 cursor-pointer transition-colors"
+                            title="Edit Product"
+                          />
+                        </Link>
                         {/* <CiTrash
                           className="hover:text-red-600 cursor-pointer transition-colors"
                           title="Delete Product"
