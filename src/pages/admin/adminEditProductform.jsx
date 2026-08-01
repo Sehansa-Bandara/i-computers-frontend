@@ -10,7 +10,7 @@ import { useLocation } from "react-router-dom";
 
 export default function AdminEditProductForm() {
     const location = useLocation();
-    
+
     const product = location?.state?.product || location?.state;
 
     const [productId, setProductId] = useState(product?.productId || "");
@@ -31,10 +31,10 @@ export default function AdminEditProductForm() {
     const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
-    if(location.state==null){
+    if (location.state == null) {
         toast.error("Product not found")
         navigate("/admin/products")
-    } 
+    }
 
     useEffect(() => {
         if (product) {
