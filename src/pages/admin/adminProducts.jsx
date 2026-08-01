@@ -339,7 +339,7 @@ export default function AdminProducts() {
                     </td>
                     <td className="p-2 font-semibold text-blue-900">{item.productId}</td>
                     <td className="p-2 font-medium text-slate-900 max-w-[200px] truncate">{item.name}</td>
-                    <td className="p-2 font-bold text-emerald-700">${item.price}</td>
+                    <td className="p-2 font-bold text-emerald-700">Rs. {item.price}</td>
                     <td className="p-2">{item.stock}</td>
                     <td className="p-2">{item.category}</td>
                     <td className="p-2">{item.brand}</td>
@@ -354,7 +354,7 @@ export default function AdminProducts() {
                         {item.isAvailable ? "Available" : "Not available"}
                       </span>
                     </td>
-                    <td className="p-2 text-slate-500">${item.labledPrice || item.price}</td>
+                    <td className="p-2 text-slate-500">Rs. {item.labledPrice || item.price}</td>
                     <td className="p-2">
                       {/* icons only */}
                       <div className="flex gap-2 justify-center items-center text-lg">
