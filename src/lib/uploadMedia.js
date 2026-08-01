@@ -5,28 +5,28 @@ const url = "https://cuvhbnjjyfawbhbzbsqr.supabase.co";
 const supabase = createClient(url, key);
 
 export function uploadMedia(file) {
-	return new Promise((resolve, reject) => {
-		if (file == null) {
-			reject("No file selected");
-		} else {
-			const timestamp = new Date().getTime();
-			const fileName = timestamp + "_" + file.name;
+    return new Promise((resolve, reject) => {
+        if (file == null) {
+            reject("No file selected");
+        } else {
+            const timestamp = new Date().getTime();
+            const fileName = timestamp + "_" + file.name;
 
-			supabase.storage
-				.from("images")
-				.upload(fileName, file)
-				.then(() => {
-					const publicUrl = supabase.storage
-						.from("images")
-						.getPublicUrl(fileName).data.publicUrl;
+            supabase.storage
+                .from("images")
+                .upload(fileName, file)
+                .then(() => {
+                    const publicUrl = supabase.storage
+                        .from("images")
+                        .getPublicUrl(fileName).data.publicUrl;
 
-					resolve(publicUrl);
-				})
-				.catch((err) => {
-					reject(err);
-				});
-		}
-	});
+                    resolve(publicUrl);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        }
+    });
 }
 
 export default uploadMedia;
