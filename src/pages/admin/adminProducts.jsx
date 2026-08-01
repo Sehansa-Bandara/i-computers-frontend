@@ -194,6 +194,39 @@ const sampleProducts = [
 const PLACEHOLDER_IMAGE =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'%3E%3Crect width='50' height='50' rx='6' fill='%23f1f5f9'/%3E%3Cpath d='M19 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm-9 17h30l-9-12-6 8-4.5-6-10.5 10z' fill='%2394a3b8'/%3E%3C/svg%3E";
 
+const getProductImage = (item) => {
+  if (!item) return PLACEHOLDER_IMAGE;
+  let imgs = item.images || item.image;
+  if (!imgs) return PLACEHOLDER_IMAGE;
+
+  if (typeof imgs === "string") {
+    try {
+      const parsed = JSON.parse(imgs);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        imgs = parsed;
+      } else if (imgs.trim().startsWith("http") || imgs.trim().startsWith("data:")) {
+        return imgs.trim();
+      }
+    } catch {
+      if (imgs.trim().startsWith("http") || imgs.trim().startsWith("data:")) {
+        return imgs.trim();
+      }
+    }
+  }
+
+  if (Array.isArray(imgs) && imgs.length > 0) {
+    const first = imgs[0];
+    if (typeof first === "string" && first.trim() !== "") {
+      return first.trim();
+    }
+    if (first && typeof first === "object" && first !== null) {
+      return first.url || first.src || first.publicUrl || PLACEHOLDER_IMAGE;
+    }
+  }
+
+  return PLACEHOLDER_IMAGE;
+};
+
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -316,26 +349,23 @@ export default function AdminProducts() {
               </tr>
             ) : (
               products.map((item) => {
-                const imageSrc =
-                  item.images && item.images.length > 0 && item.images[0]
-                    ? item.images[0]
-                    : PLACEHOLDER_IMAGE;
-
                 return (
                   <tr
                     key={item.productId || item._id}
                     className="border-b border-slate-100 hover:bg-slate-50 text-center text-sm text-slate-700 transition-colors"
                   >
-                    <td className="p-2 flex justify-center">
-                      <img
-                        src={imageSrc}
-                        alt={item.name}
-                        className="w-[50px] h-[50px] object-cover rounded-md border border-slate-200"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = PLACEHOLDER_IMAGE;
-                        }}
-                      />
+                    <td className="p-2">
+                      <div className="flex justify-center items-center">
+                        <img
+                          src={getProductImage(item)}
+                          alt={item.name || "Product"}
+                          className="w-[50px] h-[50px] object-cover rounded-md border border-slate-200"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = PLACEHOLDER_IMAGE;
+                          }}
+                        />
+                      </div>
                     </td>
                     <td className="p-2 font-semibold text-blue-900">{item.productId}</td>
                     <td className="p-2 font-medium text-slate-900 max-w-[200px] truncate">{item.name}</td>
