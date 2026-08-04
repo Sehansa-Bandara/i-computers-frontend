@@ -6,6 +6,7 @@ import ImageSlideShow from "../components/image-slideShow";
 import getFormattedPrice from "../lib/price-format";
 import { toast } from "react-hot-toast";
 
+
 export default function ProductOverview() {
     const params = useParams();
     const location = useLocation();
@@ -22,7 +23,7 @@ export default function ProductOverview() {
             }).catch((err) => {
                 toast.error("Failed to fetch product");
                 setProduct(null);
-                setLoading(false); 
+                setLoading(false);
             });
         }
     }, [productId, loading]);
@@ -46,16 +47,23 @@ export default function ProductOverview() {
                             ID: {product.productId}
                         </span>
 
-                        <h1 className="text-3xl font-extrabold text-slate-800 leading-tight">
+                        <h1 className="text-3xl font-semibold text-slate-800 leading-tight">
                             {product.name}
-                        </h1>
+                            {product.altNames.map(
+                                (name, index) => {
+                                    return (<span key={index} className="font-normal text-gray-500"> |{name}</span>)
+                                }
 
+                            )}
+                        </h1>
+                        <p className="text-sm text-black-500 pt-2">Brand: {product.brand} {product.model}</p>
+                        <p className="text-sm text-black-500 pt-2">Category: {product.category}</p>
                         <p className="text-slate-600 text-base leading-relaxed">
                             {product.description}
                         </p>
 
                         <div className="flex items-baseline gap-4 pt-2">
-                            <span className="text-3xl font-extrabold text-emerald-600">
+                            <span className="text-3xl font-semibold text-emerald-600">
                                 {getFormattedPrice(product.price)}
                             </span>
                             {Number(labelledPrice) > Number(product?.price) && (
@@ -70,7 +78,7 @@ export default function ProductOverview() {
                                 Add to Cart
                             </button>
                             <Link to="/products" className="px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl transition-all">
-                                Back to Products
+                                Buy Now 
                             </Link>
                         </div>
                     </div>
