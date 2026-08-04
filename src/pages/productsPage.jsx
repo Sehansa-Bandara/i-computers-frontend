@@ -3,7 +3,7 @@ import api from "../lib/api";
 import toast from "react-hot-toast";
 import LoadingAnimation from "../components/loadingAnimation";
 import ProductCard from "../components/productCard";
-import { useNavigate } from "react-router-dom";
+
 
 
 
@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 export default function ProductPage() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    
 
     useEffect(
         () => {
