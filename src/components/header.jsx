@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import {HiShoppingCart} from "react-icons/hi";
+
 
 export default function Header() {
     return (
@@ -15,7 +17,10 @@ export default function Header() {
 
 
             </div>
-            <div className="w-[200px] h-full bg-white">
+            <div className="w-[200px] h-full border border-white text-white flex items-center">
+                <Link to="/cart">
+                    <HiShoppingCart className="text-white text-4xl" />
+                </Link>
 
             </div>
         </header>

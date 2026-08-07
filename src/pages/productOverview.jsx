@@ -5,6 +5,7 @@ import LoadingAnimation from "../components/loadingAnimation";
 import ImageSlideShow from "../components/image-slideShow";
 import getFormattedPrice from "../lib/price-format";
 import { toast } from "react-hot-toast";
+import { addToCart } from "../lib/cart";
 
 
 export default function ProductOverview() {
@@ -74,7 +75,13 @@ export default function ProductOverview() {
                         </div>
 
                         <div className="pt-6 flex items-center gap-4">
-                            <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md transition-all cursor-pointer">
+                            <button
+                                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md transition-all cursor-pointer"
+                                onClick={() => {
+                                    addToCart(product, 1);
+                                    toast.success("Added to cart");
+                                }}
+                            >
                                 Add to Cart
                             </button>
                             <Link to="/products" className="px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl transition-all">

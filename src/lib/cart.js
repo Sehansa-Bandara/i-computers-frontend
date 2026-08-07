@@ -43,7 +43,7 @@ export function getCart() {
     }
 
 }
-export function addToCart( product , qty ){
+export function addToCart(product, qty) {
 
     const cart = getCart()
 
@@ -51,41 +51,41 @@ export function addToCart( product , qty ){
 
     const productIndex = cart.findIndex(
 
-        (item)=>{
+        (item) => {
 
             return item.product.productId == product.productId
 
         }
 
     )
-     if(productIndex == -1){
+    if (productIndex == -1) {
 
-        if(qty<1){
+        if (qty < 1) {
             return
         }
 
         cart.push(
             {
-                product : {
-                    productId : product.productId,
-                    name : product.name,
-                    image : product.images[0],
-                    price : product.price,
-                    labelledPrice : product.labelledPrice,
+                product: {
+                    productId: product.productId,
+                    name: product.name,
+                    image: product.images[0],
+                    price: product.price,
+                    labelledPrice: product.labelledPrice,
                 },
-                qty : qty
+                qty: qty
             }
         )
 
-        
-    
-    }else{
+
+
+    } else {
 
         cart[productIndex].qty += qty
 
-        if(cart[productIndex].qty < 1){
+        if (cart[productIndex].qty < 1) {
 
-            cart.splice(productIndex , 1)
+            cart.splice(productIndex, 1) // removes the 1 item from the cart if qty becomes 0 or less
 
         }
 
@@ -93,6 +93,6 @@ export function addToCart( product , qty ){
 
     const cartInString = JSON.stringify(cart);
 
-    localStorage.setItem("cart" , cartInString)
+    localStorage.setItem("cart", cartInString)
 
 }
