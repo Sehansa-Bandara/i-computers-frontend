@@ -27,72 +27,69 @@ const sampleCart = [
 
 
 export function getCart() {
-
     const cartInString = localStorage.getItem("cart");
 
     if (cartInString == null) {
-
-        localStorage.setItem("cart", "[]")
-        return []
-
+        localStorage.setItem("cart", "[]");
+        return [];
     } else {
-
-        const cart = JSON.parse(cartInString);
-        return cart
-
+        try {
+            const cart = JSON.parse(cartInString);
+            return Array.isArray(cart) ? cart : [];
+        } catch {
+            localStorage.setItem("cart", "[]");
+            return [];
+        }
     }
-
 }
+
 export function addToCart(product, qty) {
+    const cart = getCart();
 
-    const cart = getCart()
+    // check if product already exists in cart
+    const productIndex = cart.findIndex((item) => item.product?.productId === product.productId);
 
-    //check if product already exists in cart
-
-    const productIndex = cart.findIndex(
-
-        (item) => {
-
-            return item.product.productId == product.productId
-
-        }
-
-    )
-    if (productIndex == -1) {
-
+    if (productIndex === -1) {
         if (qty < 1) {
-            return
+            return;
         }
 
-        cart.push(
-            {
-                product: {
-                    productId: product.productId,
-                    name: product.name,
-                    image: product.images[0],
-                    price: product.price,
-                    labelledPrice: product.labelledPrice,
-                },
-                qty: qty
-            }
-        )
+        const image = Array.isArray(product.images) && product.images.length > 0
+            ? product.images[0]
+            : (product.image || "");
 
+        const labelledPrice = product.labelledPrice ?? product.labledPrice ?? product.labeledPrice;
 
-
+        cart.push({
+            product: {
+                productId: product.productId,
+                name: product.name,
+                image: image,
+                price: product.price,
+                labelledPrice: labelledPrice,
+            },
+            qty: qty
+        });
     } else {
-
-        cart[productIndex].qty += qty
+        cart[productIndex].qty += qty;
 
         if (cart[productIndex].qty < 1) {
-
-            cart.splice(productIndex, 1) // removes the 1 item from the cart if qty becomes 0 or less
-
+            cart.splice(productIndex, 1); // removes the item if qty becomes 0 or less
         }
-
     }
 
     const cartInString = JSON.stringify(cart);
-
-    localStorage.setItem("cart", cartInString)
-
+    localStorage.setItem("cart", cartInString);
 }
+
+export function getCartTotal(cart = getCart()){
+    if (!cart || !Array.isArray(cart)) return 0;
+    let total = 0;
+
+    for(let i = 0 ; i < cart.length ; i++){
+        total += (cart[i]?.product?.price || 0) * (cart[i]?.qty || 0);
+    }
+
+    return total;
+}
+
