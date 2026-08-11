@@ -84,7 +84,21 @@ export default function ProductOverview() {
                             >
                                 Add to Cart
                             </button>
-                            <Link to="/products" className="px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl transition-all">
+                            <Link to="/checkout"
+                            state={[
+                                {
+                                    product:{
+                                        productId:product.productId,
+                                        name:product.name,
+                                        price:product.price,
+                                        labelledPrice:product.labelledPrice,
+                                        image:product.images[0]
+
+                                    },
+                                    qty:1
+                                }
+                            ]}
+                             className="px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl transition-all flex justify-center item-center">
                                 Buy Now 
                             </Link>
                         </div>

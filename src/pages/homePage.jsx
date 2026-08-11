@@ -3,6 +3,7 @@ import Header from "../components/header";
 import ProductPage from "./productsPage";
 import ProductOverview from "./productOverview";
 import CartPage from "./cartPage";
+import CheckoutPage from "./checkoutPage";
 
 
 export default function HomePage() {
@@ -15,6 +16,7 @@ export default function HomePage() {
                 <Route path="/products" element={<ProductPage />} />
                 <Route path="/overview/:productId" element={<ProductOverview />} />
                 <Route path="/cart" element={<CartPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/*" element={<h1>404 Not Found</h1>} />
 
 
