@@ -3,6 +3,8 @@ import { getCart, getCartTotal, addToCart } from "../lib/cart";
 import { Link } from "react-router-dom";
 import getFormattedPrice from "../lib/price-format";
 
+import OrderModal from "../components/orderModal";
+
 
 export default function CartPage() {
     const [cart, setCart] = useState(getCart());
@@ -89,13 +91,7 @@ export default function CartPage() {
                 </div>
             )}
             <div className="w-full lg:w-[550px] min-h-[90px] fixed bottom-[80px] lg:bottom-2 bg-white shadow-lg shadow-accent-blue my-4 rounded-md overflow-hidden flex flex-row items-center justify-between px-4">
-                <Link
-                    state={cart}
-                    to="/checkout"
-                    className="bg-accent-blue hover:bg-accent-dark transition-colors duration-300 text-white px-6 py-2.5 rounded-md font-semibold cursor-pointer"
-                >
-                    Checkout
-                </Link>
+                <OrderModal />
                 <span className="text-xl font-bold text-slate-800 pr-2">
                     {getFormattedPrice(getCartTotal(cart))}
                 </span>

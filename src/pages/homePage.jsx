@@ -4,6 +4,8 @@ import ProductPage from "./productsPage";
 import ProductOverview from "./productOverview";
 import CartPage from "./cartPage";
 import CheckoutPage from "./checkoutPage";
+import OrderModal from "../components/orderModal";
+
 
 
 export default function HomePage() {
