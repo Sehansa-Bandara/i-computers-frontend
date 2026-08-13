@@ -1,12 +1,14 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Modal from "react-modal";
-import { getCartTotal } from "../lib/cart";
+import { toast } from "react-hot-toast";
+import { getCartTotal, getCart } from "../lib/cart";
 import getFormattedPrice from "../lib/price-format";
 import { UserContext } from "../context/user";
 import { useNavigate } from "react-router-dom";
 
 export default function OrderModal(props) {
     const userData = useContext(UserContext);
+    const cart = props.cart || getCart();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [firstName, setFirstName] = useState(userData?.user?.firstName || "");
     const [lastName, setLastName] = useState(userData?.user?.lastName || "");
@@ -17,8 +19,18 @@ export default function OrderModal(props) {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
     const [specialNotes, setSpecialNotes] = useState("");
-    // const [file, setFile] = useState(null)
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (userData?.user) {
+            if (!firstName && userData.user.firstName) {
+                setFirstName(userData.user.firstName);
+            }
+            if (!lastName && userData.user.lastName) {
+                setLastName(userData.user.lastName);
+            }
+        }
+    }, [userData]);
 
     function openModal() {
         setModalIsOpen(true);
@@ -28,66 +40,246 @@ export default function OrderModal(props) {
         setModalIsOpen(false);
     }
 
+    function handleConfirmOrder() {
+        if (!firstName.trim()) {
+            toast.error("Please enter your first name");
+            return;
+        }
+        if (!addressLine1.trim()) {
+            toast.error("Please enter your address");
+            return;
+        }
+        if (!city.trim()) {
+            toast.error("Please enter your city");
+            return;
+        }
+        if (!phoneNumber.trim()) {
+            toast.error("Please enter your phone number");
+            return;
+        }
+
+        const orderData = {
+            firstName,
+            lastName,
+            addressLine1,
+            addressLine2,
+            city,
+            postalCode,
+            phoneNumber,
+            secondaryPhoneNumber,
+            specialNotes,
+            items: cart,
+            total: getCartTotal(cart),
+            createdAt: new Date().toISOString()
+        };
+
+        console.log("Order confirmed:", orderData);
+        toast.success("Order placed successfully!");
+        closeModal();
+    }
+
     return (
         <>
             <button
                 onClick={openModal}
-                className="bg-accent-blue/70 hover:bg-accent transition-colors duration-300 text-white px-6 py-2.5 rounded-md font-semibold cursor-pointer"
+                className="bg-accent-blue/80 hover:bg-accent transition-colors duration-300 text-white px-6 py-2.5 rounded-md font-semibold cursor-pointer"
             >
                 Order
             </button>
+
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
+                ariaHideApp={false}
                 style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.65)',
+                        zIndex: 1000,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '16px'
+                    },
                     content: {
+                        position: 'relative',
+                        inset: 'auto',
                         margin: 'auto',
                         padding: '0px',
-                        paddingBottom: '0px',
-                        backgroundColor: 'transparent',
-                        border: 'none'
+                        border: 'none',
+                        background: 'transparent',
+                        maxWidth: '860px',
+                        width: '100%',
+                        overflow: 'visible'
                     }
                 }}
             >
-                <div className="w-full min-h-full bg-primary rounded-2xl flex flex-col z-50">
-                    <div className="w-full h-[70px] bg-accent rounded-t-2xl flex">
-                        {/*  order summary */}
-                        <div className="w-full h-full flex flex-col justify-center items-center">
-                            <h1 className="text-xl font-semibold text-white">Order Summary</h1>
-                        </div>
+                {/* Landscape Modal Container */}
+                <div className="w-full max-w-[860px] bg-[#eef0f6] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
+                    {/* 1. Header Banner */}
+                    <div className="w-full py-4 bg-[#000080] rounded-t-2xl flex items-center justify-center relative shadow-sm">
+                        <h1 className="text-xl md:text-2xl font-bold text-white tracking-wide">
+                            Order Summary
+                        </h1>
+                        <button
+                            onClick={closeModal}
+                            aria-label="Close modal"
+                            className="absolute right-4 text-white/70 hover:text-white text-xl font-bold transition-colors cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10"
+                        >
+                            ✕
+                        </button>
                     </div>
-                    {/* total */}
-                    <div className="w-full h-[70px] bg-[#7979b8] flex sticky top-0">
-                        <div className="w-1/2 h-full flex flex-row justify-center items-center gap-2">
-                            <h1 className="text-lg font-semibold text-white">Total : </h1>
-                            <span className="text-lg font-semibold text-white">
-                                {getFormattedPrice(getCartTotal(props.cart || []))}
+
+                    {/* 2. Total & Items Bar */}
+                    <div className="w-full py-3.5 px-6 md:px-8 bg-[#6f72b9] flex flex-row justify-between items-center text-white">
+                        <div className="flex items-center gap-2">
+                            <span className="text-base md:text-lg font-bold">Total : </span>
+                            <span className="text-base md:text-lg font-bold">
+                                {getFormattedPrice(getCartTotal(cart))}
                             </span>
                         </div>
-                        <div className="w-1/2 h-full flex flex-row justify-center items-center gap-2">
-                            <h1 className="text-lg font-semibold text-white">Items : </h1>
-                            <span className="text-lg font-semibold text-white">{props.cart?.length || 0}</span>
+                        <div className="flex items-center gap-2">
+                            <span className="text-base md:text-lg font-bold">Items : </span>
+                            <span className="text-base md:text-lg font-bold">{cart?.length || 0}</span>
                         </div>
                     </div>
-                    <div className="w-full flex flex-row flex-wrap text-secondary">
-                        <div className="w-1/2 h-[100px] flex flex-col justify-center p-4">
-                            <label className="">First Name</label>
-                            <input
-                                value={firstName}
-                                onChange={(e) => { setFirstName(e.target.value); }}
-                                placeholder="John"
-                                className="w-full h-[40px] rounded-md outline-0 border-gray-500 border px-2 text-black bg-white"
-                            />
+
+                    {/* 3. Form Content - Landscape 2-Column Grid */}
+                    <div className="p-6 md:p-8 overflow-y-auto max-h-[calc(85vh-160px)]">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-slate-800">
+                            {/* First Name */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-semibold text-slate-700 mb-1.5">
+                                    First Name
+                                </label>
+                                <input
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    placeholder="John"
+                                    className="w-full h-[42px] rounded-lg border border-gray-400 bg-white px-3.5 text-slate-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000080] focus:border-transparent transition-all shadow-sm"
+                                />
+                            </div>
+
+                            {/* Last Name */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-semibold text-slate-700 mb-1.5">
+                                    Last Name
+                                </label>
+                                <input
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    placeholder="Doe"
+                                    className="w-full h-[42px] rounded-lg border border-gray-400 bg-white px-3.5 text-slate-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000080] focus:border-transparent transition-all shadow-sm"
+                                />
+                            </div>
+
+                            {/* Address Line 1 */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-semibold text-slate-700 mb-1.5">
+                                    Address Line 1
+                                </label>
+                                <input
+                                    value={addressLine1}
+                                    onChange={(e) => setAddressLine1(e.target.value)}
+                                    placeholder="123 Main St"
+                                    className="w-full h-[42px] rounded-lg border border-gray-400 bg-white px-3.5 text-slate-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000080] focus:border-transparent transition-all shadow-sm"
+                                />
+                            </div>
+
+                            {/* Address Line 2 */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-semibold text-slate-700 mb-1.5">
+                                    Address Line 2
+                                </label>
+                                <input
+                                    value={addressLine2}
+                                    onChange={(e) => setAddressLine2(e.target.value)}
+                                    placeholder="Apt 4B"
+                                    className="w-full h-[42px] rounded-lg border border-gray-400 bg-white px-3.5 text-slate-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000080] focus:border-transparent transition-all shadow-sm"
+                                />
+                            </div>
+
+                            {/* City */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-semibold text-slate-700 mb-1.5">
+                                    City
+                                </label>
+                                <input
+                                    value={city}
+                                    onChange={(e) => setCity(e.target.value)}
+                                    placeholder="Colombo"
+                                    className="w-full h-[42px] rounded-lg border border-gray-400 bg-white px-3.5 text-slate-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000080] focus:border-transparent transition-all shadow-sm"
+                                />
+                            </div>
+
+                            {/* Postal Code */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-semibold text-slate-700 mb-1.5">
+                                    Postal Code
+                                </label>
+                                <input
+                                    value={postalCode}
+                                    onChange={(e) => setPostalCode(e.target.value)}
+                                    placeholder="12345"
+                                    className="w-full h-[42px] rounded-lg border border-gray-400 bg-white px-3.5 text-slate-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000080] focus:border-transparent transition-all shadow-sm"
+                                />
+                            </div>
+
+                            {/* Phone */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-semibold text-slate-700 mb-1.5">
+                                    Phone
+                                </label>
+                                <input
+                                    value={phoneNumber}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    placeholder="+94 123 456 789"
+                                    className="w-full h-[42px] rounded-lg border border-gray-400 bg-white px-3.5 text-slate-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000080] focus:border-transparent transition-all shadow-sm"
+                                />
+                            </div>
+
+                            {/* Secondary Phone */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-semibold text-slate-700 mb-1.5">
+                                    Secondary Phone
+                                </label>
+                                <input
+                                    value={secondaryPhoneNumber}
+                                    onChange={(e) => setSecondaryPhoneNumber(e.target.value)}
+                                    placeholder="+94 987 654 321"
+                                    className="w-full h-[42px] rounded-lg border border-gray-400 bg-white px-3.5 text-slate-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000080] focus:border-transparent transition-all shadow-sm"
+                                />
+                            </div>
+
+                            {/* Special Notes - Full Width across 2 columns in landscape */}
+                            <div className="flex flex-col md:col-span-2">
+                                <label className="text-sm font-semibold text-slate-700 mb-1.5">
+                                    Special Notes
+                                </label>
+                                <textarea
+                                    value={specialNotes}
+                                    onChange={(e) => setSpecialNotes(e.target.value)}
+                                    placeholder="Any special instructions for delivery..."
+                                    rows={3}
+                                    className="w-full rounded-lg border border-gray-400 bg-white p-3 text-slate-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000080] focus:border-transparent transition-all resize-none shadow-sm"
+                                />
+                            </div>
                         </div>
-                        <div className="w-1/2 h-[100px] flex flex-col justify-center p-4">
-                            <label className="">Last Name</label>
-                            <input
-                                value={lastName}
-                                onChange={(e) => { setLastName(e.target.value); }}
-                                placeholder="Doe"
-                                className="w-full h-[40px] rounded-md outline-0 border-gray-500 border px-2 text-black bg-white"
-                            />
-                        </div>
+                    </div>
+
+                    {/* 4. Footer Bar with Confirm Order & Cancel Buttons */}
+                    <div className="w-full py-4 px-6 bg-[#6f72b9] rounded-b-2xl flex flex-row justify-center items-center gap-5 shadow-md">
+                        <button
+                            onClick={handleConfirmOrder}
+                            className="bg-[#000080] hover:bg-[#00005a] text-white font-bold px-8 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-95 text-base"
+                        >
+                            Confirm Order
+                        </button>
+                        <button
+                            onClick={closeModal}
+                            className="text-white hover:text-gray-200 font-semibold px-6 py-2.5 rounded-lg hover:bg-white/10 transition-all duration-200 cursor-pointer text-base"
+                        >
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </Modal>

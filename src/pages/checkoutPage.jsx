@@ -101,7 +101,7 @@ export default function CheckoutPage() {
             )}
             {cartItems.length > 0 && (
                 <div className="w-full lg:w-[550px] min-h-[90px] fixed bottom-[80px] lg:bottom-2 bg-white shadow-lg shadow-accent-blue my-4 rounded-md overflow-hidden flex flex-row items-center justify-between px-4">
-                    <OrderModal />
+                    <OrderModal cart={cartItems} />
                     <span className="text-xl font-bold text-slate-800 pr-2">
                         {getFormattedPrice(getCartTotal(cartItems))}
                     </span>
