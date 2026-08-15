@@ -6,3 +6,36 @@
   --color-accent-color: #000080;
   --color-accent-blue: #000080;
 }
+
+
+.tooltip-text{
+	display: none;
+}
+
+.tooltip:hover .tooltip-text{
+	display: block;
+}
+
+/* .fancy-scrollbar::-webkit-scrollbar {
+  width: 8px;
+} */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: white;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 4px;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #000080 transparent;
+}

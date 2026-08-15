@@ -5,6 +5,15 @@ import { getCartTotal, getCart } from "../lib/cart";
 import getFormattedPrice from "../lib/price-format";
 import { UserContext } from "../context/user";
 import { useNavigate } from "react-router-dom";
+import api from "../lib/api";
+
+
+const deliveryCostPerDisctrict = {
+    colombo: 500,
+    gampaha: 700,
+    kalutara: 800,
+    other: 1000
+};
 
 export default function OrderModal(props) {
     const userData = useContext(UserContext);
@@ -17,6 +26,8 @@ export default function OrderModal(props) {
     const [city, setCity] = useState("");
     const [postalCode, setPostalCode] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [district, setDistrict] = useState("colombo");
+    const [diliveryFee, setDiliveryFee] = useState(deliveryCostPerDisctrict["colombo"]);
     const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
     const [specialNotes, setSpecialNotes] = useState("");
     const navigate = useNavigate();
@@ -40,7 +51,14 @@ export default function OrderModal(props) {
         setModalIsOpen(false);
     }
 
-    function handleConfirmOrder() {
+    async function handleConfirmOrder() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            toast.error("Please login to place an order");
+            navigate("/login");
+            return;
+        }
+
         if (!firstName.trim()) {
             toast.error("Please enter your first name");
             return;
@@ -53,30 +71,53 @@ export default function OrderModal(props) {
             toast.error("Please enter your city");
             return;
         }
+        if (!district.trim()) {
+            toast.error("Please enter your district");
+            return;
+        }
         if (!phoneNumber.trim()) {
             toast.error("Please enter your phone number");
             return;
         }
 
         const orderData = {
-            firstName,
-            lastName,
-            addressLine1,
-            addressLine2,
-            city,
-            postalCode,
-            phoneNumber,
-            secondaryPhoneNumber,
-            specialNotes,
-            items: cart,
-            total: getCartTotal(cart),
-            createdAt: new Date().toISOString()
+            firstName: firstName,
+            lastName: lastName,
+            addressLine1: addressLine1,
+            addressLine2: addressLine2,
+            city: city,
+            postalCode: postalCode,
+            district: district,
+            diliveryFee: diliveryFee,
+            phone: phoneNumber,
+            secondaryPhone: secondaryPhoneNumber,
+            customerNotes: specialNotes,
+            items: []
         };
 
-        console.log("Order confirmed:", orderData);
-        toast.success("Order placed successfully!");
-        closeModal();
+        for (let i = 0; i < props.cart.length; i++) {
+            orderData.items.push({
+                productId: props.cart[i].product.productId,
+                qty: props.cart[i].qty
+            });
+        }
+
+        try {
+            await api.post("/orders", orderData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            toast.success("Order placed successfully");
+            setModalIsOpen(false);
+            navigate("/products");
+        } catch (err) {
+            console.log(err);
+            toast.error("Failed to place order");
+        }
     }
+    
 
     return (
         <>
@@ -130,11 +171,15 @@ export default function OrderModal(props) {
                     </div>
 
                     {/* 2. Total & Items Bar */}
-                    <div className="w-full py-3.5 px-6 md:px-8 bg-[#6f72b9] flex flex-row justify-between items-center text-white">
+                    <div className="w-full py-3.5 px-6 md:px-8 bg-[#6f72b9] flex flex-row justify-between sticky top-0 items-center text-white">
                         <div className="flex items-center gap-2">
-                            <span className="text-base md:text-lg font-bold">Total : </span>
+                            <span className="text-base md:text-lg font-bold">Total :    </span>
                             <span className="text-base md:text-lg font-bold">
                                 {getFormattedPrice(getCartTotal(cart))}
+                            </span>
+                            <span className="text-base md:text-lg font-bold"> + Delivery Fee : </span>
+                            <span className="text-base md:text-lg font-bold">
+                                {getFormattedPrice(diliveryFee)}
                             </span>
                         </div>
                         <div className="flex items-center gap-2">
@@ -211,6 +256,26 @@ export default function OrderModal(props) {
                                 />
                             </div>
 
+                            {/* District */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-semibold text-slate-700 mb-1.5">
+                                    District
+                                </label>
+                                <select
+                                    value={district}
+                                    onChange={(e) => {
+                                        setDistrict(e.target.value);
+                                        setDiliveryFee(deliveryCostPerDisctrict[e.target.value]);
+                                    }}
+                                    className="w-full h-[42px] rounded-lg border border-gray-400 bg-white px-3.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#000080] focus:border-transparent transition-all shadow-sm cursor-pointer"
+                                >
+                                    <option value="colombo">Colombo</option>
+                                    <option value="gampaha">Gampaha</option>
+                                    <option value="kalutara">Kalutara</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
                             {/* Postal Code */}
                             <div className="flex flex-col">
                                 <label className="text-sm font-semibold text-slate-700 mb-1.5">
@@ -267,7 +332,7 @@ export default function OrderModal(props) {
                     </div>
 
                     {/* 4. Footer Bar with Confirm Order & Cancel Buttons */}
-                    <div className="w-full py-4 px-6 bg-[#6f72b9] rounded-b-2xl flex flex-row justify-center items-center gap-5 shadow-md">
+                    <div className="w-full py-4 px-6 bg-[#6f72b9] rounded-b-2xl flex flex-row justify-center items-center gap-5 shadow-md sticky bottom-0">
                         <button
                             onClick={handleConfirmOrder}
                             className="bg-[#000080] hover:bg-[#00005a] text-white font-bold px-8 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-95 text-base"
@@ -286,3 +351,5 @@ export default function OrderModal(props) {
         </>
     );
 }
+
+
