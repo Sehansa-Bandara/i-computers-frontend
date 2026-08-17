@@ -37,8 +37,8 @@ export default function AdminPage() {
             <Link
               to="/admin"
               className={`w-full flex items-center p-3.5 text-lg font-medium rounded-xl gap-3.5 transition-all duration-200 ${isActive("/admin") && location.pathname === "/admin"
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-600/40 font-semibold"
-                  : "text-blue-100 hover:bg-blue-800/50 hover:text-white"
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/40 font-semibold"
+                : "text-blue-100 hover:bg-blue-800/50 hover:text-white"
                 }`}
             >
               <GiShoppingCart className="text-2xl" />
@@ -48,8 +48,8 @@ export default function AdminPage() {
             <Link
               to="/admin/products"
               className={`w-full flex items-center p-3.5 text-lg font-medium rounded-xl gap-3.5 transition-all duration-200 ${isActive("/admin/products") || location.pathname.includes("/admin/addproduct")
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-600/40 font-semibold"
-                  : "text-blue-100 hover:bg-blue-800/50 hover:text-white"
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/40 font-semibold"
+                : "text-blue-100 hover:bg-blue-800/50 hover:text-white"
                 }`}
             >
               <BsBox className="text-2xl" />
@@ -59,8 +59,8 @@ export default function AdminPage() {
             <Link
               to="/admin/users"
               className={`w-full flex items-center p-3.5 text-lg font-medium rounded-xl gap-3.5 transition-all duration-200 ${isActive("/admin/users")
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-600/40 font-semibold"
-                  : "text-blue-100 hover:bg-blue-800/50 hover:text-white"
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/40 font-semibold"
+                : "text-blue-100 hover:bg-blue-800/50 hover:text-white"
                 }`}
             >
               <FaRegUser className="text-2xl" />
@@ -77,7 +77,7 @@ export default function AdminPage() {
       {/* Content Area */}
       <div className="flex-1 bg-slate-100 p-6 overflow-y-auto">
         <Routes>
-          <Route path="/" element={<h1 className="text-3xl font-bold text-slate-800">Orders Page</h1>} />
+          <Route path="/" element={<AdminOrderPage />} />
           <Route path="/products" element={<AdminProducts />} />
           <Route path="/users" element={<h1 className="text-3xl font-bold text-slate-800">Users Page</h1>} />
           <Route path="/addproduct" element={<AddProductForm />} />
