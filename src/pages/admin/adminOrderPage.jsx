@@ -8,6 +8,10 @@ import AdminOrderDetailsModal from "../../components/adminOrderDetailsModal";
 export default function AdminOrdersPage() {
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [pageSize, setPageSize] = useState(3);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalOrders, setTotalOrders] = useState(0);
 
 
     useEffect(() => {
@@ -93,51 +97,51 @@ export default function AdminOrdersPage() {
                 </tbody>
             </table>
 
-            <div className="w-[calc(100%-360px)] h-[100px]  fixed bottom-10 flex justify-center items-center">
-                <div className="w-[500px] h-[50px] bg-white shadow-2xl rounded-md flex justify-between overflow-hidden"></div>
+            <div className="w-[calc(100%-320px)] h-[80px] fixed bottom-0 left-[320px] flex justify-center items-center pointer-events-none z-50">
+                <div className="w-[600px] h-[50px] bg-white shadow-2xl rounded-xl flex justify-between items-center overflow-hidden pointer-events-auto border border-slate-200">
+                    <button className="h-full px-4 hover:bg-accent hover:text-white text-accent disabled:text-gray-400 disabled:hover:bg-transparent disabled:hover:text-gray-400 transition-colors duration-300 cursor-pointer font-medium"
+                        disabled={currentPage == 1}
+                        onClick={
+                            () => {
+                                const newPageNumber = currentPage - 1
+                                setCurrentPage(newPageNumber)
+                                setIsLoading(true)
+                            }
+                        }>
+                        &lt;&lt; Previous
+                    </button>
+                    
+                    <div className="h-full flex justify-center items-center gap-2 font-medium text-slate-700">
+                        <span>Page {currentPage} of {totalPages}</span>
+                    </div>
 
-                <button className="h-full px-4 hover:bg-accent hover:text-white text-accent transition-colors duration-300 cursor-pointer"
-                    disabled={currentPage == 1}
-                    onClick={
-                        () => {
+                    <div className="h-full text-slate-700 flex justify-center items-center gap-1.5 px-3">
+                        <label htmlFor="pageSize" className="text-sm font-medium">Page Size:</label>
+                        <select className="h-8 border border-slate-200 rounded px-1.5 text-sm outline-none cursor-pointer focus:border-accent bg-transparent"
+                            value={pageSize}
+                            onChange={(e) => {
+                                setPageSize(parseInt(e.target.value, 10));
+                                setIsLoading(true);
+                            }
+                            }>
+                            <option value={3}>3</option>
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                        </select>
+                    </div>
 
-                            const newPageNumber = currentPage - 1
+                    <button
+                        disabled={currentPage == totalPages}
+                        onClick={() => {
+                            const newPageNumber = currentPage + 1
                             setCurrentPage(newPageNumber)
                             setIsLoading(true)
-                        }
-                    }>
-                    &lt;&lt; Previous
-                </button>
-                <div className="h-full text-accent flex justify-center items-center gap-1">
-                    <label htmlFor="pageSize">Page Size:</label>
-                    <select className="h-full hover:bg-accent hover:text-white text-accent transition-colors duration-300 cursor-pointer"
-                        value={pageSize}
-                        onChange={(e) => {
-                            setPageSize(e.target.value);
-                            setIsLoading(true);
-                        }
-                        }>
-                        <option value={3}>3</option>
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                    </select>
+                        }}
+                        className="h-full px-4 hover:bg-accent hover:text-white text-accent disabled:text-gray-400 disabled:hover:bg-transparent disabled:hover:text-gray-400 transition-colors duration-300 cursor-pointer font-medium" >
+                        Next &gt;&gt;
+                    </button>
                 </div>
             </div>
-
-            <div className="h-full px-4 hover:bg-accent hover:text-white text-accent transition-colors duration-300 cursor-pointer flex justify-center items-center gap-2">
-                <span>Page {currentPage} of {totalPages}</span>
-            </div>
-
-            <button
-                disabled={currentPage == totalPages}
-                onClick={() => {
-                    const newPageNumber = currentPage + 1
-                    setCurrentPage(newPageNumber)
-                    setIsLoading(true)
-                }}
-                className="h-full px-4 hover:bg-accent hover:text-white text-accent transition-colors duration-300 cursor-pointer" >
-                Next &gt;&gt;
-            </button>
         </div>
 
 

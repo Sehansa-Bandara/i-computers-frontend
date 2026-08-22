@@ -5,6 +5,7 @@ import { FaRegUser } from "react-icons/fa";
 import AdminProducts from "./admin/adminProducts";
 import AddProductForm from "./admin/adminAddproduct";
 import AdminEditProductForm from "./admin/adminEditProductform";
+import AdminOrdersPage from "./admin/adminOrderPage";
 
 export default function AdminPage() {
   const location = useLocation();
@@ -77,7 +78,7 @@ export default function AdminPage() {
       {/* Content Area */}
       <div className="flex-1 bg-slate-100 p-6 overflow-y-auto">
         <Routes>
-          <Route path="/" element={<AdminOrderPage />} />
+          <Route path="/" element={<AdminOrdersPage />} />
           <Route path="/products" element={<AdminProducts />} />
           <Route path="/users" element={<h1 className="text-3xl font-bold text-slate-800">Users Page</h1>} />
           <Route path="/addproduct" element={<AddProductForm />} />
