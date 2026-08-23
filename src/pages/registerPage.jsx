@@ -41,9 +41,9 @@ export default function RegisterPage() {
                 }
 
                 if (res.data.isAdmin) {
-                    navigate("/admin/dashboard");
+                    navigate("/admin");
                 } else {
-                    navigate("/user/dashboard");
+                    navigate("/");
                 }
             })
             .catch((err) => {

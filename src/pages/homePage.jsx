@@ -4,8 +4,7 @@ import ProductPage from "./productsPage";
 import ProductOverview from "./productOverview";
 import CartPage from "./cartPage";
 import CheckoutPage from "./checkoutPage";
-import OrderModal from "../components/orderModal";
-
+import MyOrdersPage from "./myOrdersPage";
 
 
 export default function HomePage() {
@@ -19,7 +18,10 @@ export default function HomePage() {
                 <Route path="/overview/:productId" element={<ProductOverview />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/my-orders" element={<MyOrdersPage />} />
                 <Route path="/*" element={<h1>404 Not Found</h1>} />
+
+
 
 
             </Routes>

@@ -6,6 +6,7 @@ import AdminProducts from "./admin/adminProducts";
 import AddProductForm from "./admin/adminAddproduct";
 import AdminEditProductForm from "./admin/adminEditProductform";
 import AdminOrdersPage from "./admin/adminOrderPage";
+import AdminUsersPage from "./admin/adminUsers";
 
 export default function AdminPage() {
   const location = useLocation();
@@ -79,8 +80,9 @@ export default function AdminPage() {
       <div className="flex-1 bg-slate-100 p-6 overflow-y-auto">
         <Routes>
           <Route path="/" element={<AdminOrdersPage />} />
+          <Route path="/dashboard" element={<AdminOrdersPage />} />
           <Route path="/products" element={<AdminProducts />} />
-          <Route path="/users" element={<h1 className="text-3xl font-bold text-slate-800">Users Page</h1>} />
+          <Route path="/users" element={<AdminUsersPage />} />
           <Route path="/addproduct" element={<AddProductForm />} />
           <Route path="/editproduct" element={<AdminEditProductForm />} />
         </Routes>

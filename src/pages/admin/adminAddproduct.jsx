@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { toast } from "react-hot-toast";
-import { useNavigate, Link } from "react-router-dom";
-import uploadMedia from "../../lib/uploadMedia.js";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+import uploadMedia from "../../lib/uploadMedia";
 import { CiCircleInfo } from "react-icons/ci";
-import api from "../../lib/api.js";
-import LoadingAnimation from "../../components/loadingAnimation.jsx";
+import api from "../../lib/api";
+import LoadingAnimation from "../../components/loadingAnimation";
 
 export default function AddProductForm() {
   const [productId, setProductId] = useState("");
@@ -117,7 +117,7 @@ export default function AddProductForm() {
           </button>
         </div>
       </div>
-        
+
       <div className="w-[15%] flex flex-col h-[85px] p-2">
         <label className="text-slate-700 text-sm font-semibold mb-1.5">Product ID</label>
         <input type="text" value={productId} onChange={(e) => setProductId(e.target.value)} className="w-full h-[42px] rounded-lg border border-slate-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 bg-slate-50/50" />
