@@ -7,14 +7,15 @@ import CheckoutPage from "./checkoutPage";
 import MyOrdersPage from "./myOrdersPage";
 
 
-export default function HomePage() {
+
+export default function HomePage(props) {
     return (
         <div className="w-full min-h-full">
             <Header />
             <Routes>
                 <Route path="/" element={<h1>Home Page</h1>} />
                 <Route path="/about" element={<h1>About Page</h1>} />
-                <Route path="/products" element={<ProductPage />} />
+                <Route path="/products" element={<ProductPage user={propTypes.user} />} />
                 <Route path="/overview/:productId" element={<ProductOverview />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />

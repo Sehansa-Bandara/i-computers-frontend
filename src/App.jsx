@@ -7,27 +7,58 @@ import RegisterPage from './pages/registerPage.jsx'
 import AdminPage from './pages/adminPage.jsx'
 import TestPage from './pages/testPage.jsx'
 import { Routes, Route } from 'react-router-dom';
-import {Toaster} from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
+import api from "./lib/api";
+import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
+
+
+
+
+
 
 
 function App() {
-  
+  const [user, setUser] = useState(null);
+  const [userLoadingFinished, setUserLoadingFinished] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    api
+      .get("/users/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setUser(res.data.user);
+        setUserLoadingFinished(true);
+      })
+      .catch(() => {
+        toast.error("Please login again");
+        localStorage.removeItem("token");
+        setUser(null);
+        setUserLoadingFinished(true);
+      });
+  }, []);
+
 
   return (
     <div className="w-full h-screen bg-primary">
-   <Toaster position='top-right'/>
+      <Toaster position='top-right' />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/admin/*" element={<AdminPage />} />
         <Route path="/test" element={<TestPage />} />
-        <Route path="/*" element={<HomePage />} />
+        <Route path="/*" element={<HomePage user={user}/>} />
       </Routes>
-      
-      
-      
 
-      
+
+
+
+
     </div>
   )
 }
