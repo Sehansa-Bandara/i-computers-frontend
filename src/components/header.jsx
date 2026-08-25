@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
-import {HiShoppingCart} from "react-icons/hi";
+import { HiShoppingCart } from "react-icons/hi";
 import UserData from "./userData";
 
 
 
+
 export default function Header() {
+    
     return (
         <header className="w-full h-[100px] bg-accent-blue text-white flex items-center p-4  font-semibold text-xl justify-between">
 
@@ -23,7 +25,7 @@ export default function Header() {
                 <Link to="/cart">
                     <HiShoppingCart className="text-white text-4xl" />
                 </Link>
-                <UserData />   
+                <UserData />
 
             </div>
         </header>

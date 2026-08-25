@@ -1,11 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import api from "../lib/api";
 import toast from "react-hot-toast";
 import UserContext from "../context/user";
 
+
 export default function UserData() {
+
     const userData = useContext(UserContext);
+
+    
+    const [selectedOption, setSelectedOption] = useState("name")
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -16,7 +21,9 @@ export default function UserData() {
                     Authorization: `Bearer ${token}`
                 }
             }).then((res) => {
+
                 userData.setUser(res.data.user);
+
             }).catch((err) => {
                 toast.error("please login again");
                 localStorage.removeItem("token");
@@ -37,7 +44,7 @@ export default function UserData() {
                 </div>
             ) : (
                 <div className="flex flex-col lg:flex-row h-full w-[80px] lg:w-auto lg:h-auto lg:gap-2 justify-center items-center">
-                    <img src={userData.user.image} alt="Avatar" className="w-[40px] h-[40px] rounded-full border border-white lg:p-2"/>
+                    <img src={userData.user.image} alt="Avatar" className="w-[40px] h-[40px] rounded-full border border-white lg:p-2" />
                     <select
                         value="name"
                         onChange={(e) => {

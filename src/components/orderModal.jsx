@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../lib/api";
 
 
+
 const deliveryCostPerDisctrict = {
     colombo: 500,
     gampaha: 700,
@@ -16,6 +17,8 @@ const deliveryCostPerDisctrict = {
 };
 
 export default function OrderModal(props) {
+
+    
     const userData = useContext(UserContext);
     const cart = props.cart || getCart();
     const [modalIsOpen, setModalIsOpen] = useState(false);
