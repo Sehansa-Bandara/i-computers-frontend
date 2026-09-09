@@ -18,11 +18,13 @@ export default function OrderDetailsModal(props) {
                 style={
                     {
                         content: {
-                            width: '450px',
+                            maxWidth: '450px',
+                            width: '95%',
                             margin: 'auto',
                             padding: '0px',
                             backgroundColor: 'transparent',
-                            border: 'none'
+                            border: 'none',
+                            maxHeight: '90vh'
                         }
                     }
                 }

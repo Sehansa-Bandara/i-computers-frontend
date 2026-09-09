@@ -32,7 +32,7 @@ export default function ProductOverview() {
     const labelledPrice = product?.labelledPrice ?? product?.labledPrice ?? product?.labeledPrice;
 
     return (
-        <div className="w-full min-h-[calc(100vh-100px)] bg-slate-100 p-6 flex justify-center items-center">
+        <div className="w-full lg:min-h-[calc(100vh-100px)] bg-slate-100 p-6 flex justify-center items-center">
             {loading && <LoadingAnimation />}
 
             {!loading && product != null && (

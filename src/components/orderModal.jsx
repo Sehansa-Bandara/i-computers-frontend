@@ -142,7 +142,7 @@ export default function OrderModal(props) {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        padding: '16px'
+                        padding: '10px'
                     },
                     content: {
                         position: 'relative',
@@ -153,47 +153,46 @@ export default function OrderModal(props) {
                         background: 'transparent',
                         maxWidth: '860px',
                         width: '100%',
-                        overflow: 'visible'
+                        maxHeight: '94vh',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        overflow: 'hidden'
                     }
                 }}
             >
-                {/* Landscape Modal Container */}
-                <div className="w-full max-w-[860px] bg-[#eef0f6] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
+                {/* Modal Container */}
+                <div className="w-full max-w-[860px] max-h-[94vh] bg-[#eef0f6] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
                     {/* 1. Header Banner */}
-                    <div className="w-full py-4 bg-[#000080] rounded-t-2xl flex items-center justify-center relative shadow-sm">
-                        <h1 className="text-xl md:text-2xl font-bold text-white tracking-wide">
+                    <div className="w-full py-3.5 sm:py-4 bg-[#000080] rounded-t-2xl flex items-center justify-center relative shadow-sm px-4">
+                        <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-white tracking-wide">
                             Order Summary
                         </h1>
                         <button
                             onClick={closeModal}
                             aria-label="Close modal"
-                            className="absolute right-4 text-white/70 hover:text-white text-xl font-bold transition-colors cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10"
+                            className="absolute right-3 sm:right-4 text-white/70 hover:text-white text-xl font-bold transition-colors cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10"
                         >
                             ✕
                         </button>
                     </div>
 
                     {/* 2. Total & Items Bar */}
-                    <div className="w-full py-3.5 px-6 md:px-8 bg-[#6f72b9] flex flex-row justify-between sticky top-0 items-center text-white">
-                        <div className="flex items-center gap-2">
-                            <span className="text-base md:text-lg font-bold">Total :    </span>
-                            <span className="text-base md:text-lg font-bold">
-                                {getFormattedPrice(getCartTotal(cart))}
-                            </span>
-                            <span className="text-base md:text-lg font-bold"> + Delivery Fee : </span>
-                            <span className="text-base md:text-lg font-bold">
-                                {getFormattedPrice(diliveryFee)}
-                            </span>
+                    <div className="w-full py-2.5 sm:py-3.5 px-4 sm:px-6 md:px-8 bg-[#6f72b9] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1.5 sm:gap-4 text-white">
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs sm:text-sm md:text-base font-bold">
+                            <span>Total :</span>
+                            <span>{getFormattedPrice(getCartTotal(cart))}</span>
+                            <span className="text-white/80">+ Delivery Fee :</span>
+                            <span>{getFormattedPrice(diliveryFee)}</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <span className="text-base md:text-lg font-bold">Items : </span>
-                            <span className="text-base md:text-lg font-bold">{cart?.length || 0}</span>
+                        <div className="flex items-center gap-1.5 text-xs sm:text-sm md:text-base font-bold">
+                            <span className="text-white/80">Items :</span>
+                            <span>{cart?.length || 0}</span>
                         </div>
                     </div>
 
-                    {/* 3. Form Content - Landscape 2-Column Grid */}
-                    <div className="p-6 md:p-8 overflow-y-auto max-h-[calc(85vh-160px)]">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-slate-800">
+                    {/* 3. Form Content - Responsive Grid */}
+                    <div className="p-4 sm:p-6 md:p-8 overflow-y-auto flex-1">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3.5 sm:gap-y-4 text-slate-800">
                             {/* First Name */}
                             <div className="flex flex-col">
                                 <label className="text-sm font-semibold text-slate-700 mb-1.5">
@@ -335,16 +334,16 @@ export default function OrderModal(props) {
                     </div>
 
                     {/* 4. Footer Bar with Confirm Order & Cancel Buttons */}
-                    <div className="w-full py-4 px-6 bg-[#6f72b9] rounded-b-2xl flex flex-row justify-center items-center gap-5 shadow-md sticky bottom-0">
+                    <div className="w-full py-3 sm:py-4 px-4 sm:px-6 bg-[#6f72b9] rounded-b-2xl flex flex-row justify-center items-center gap-3 sm:gap-5 shadow-md">
                         <button
                             onClick={handleConfirmOrder}
-                            className="bg-[#000080] hover:bg-[#00005a] text-white font-bold px-8 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-95 text-base"
+                            className="flex-1 sm:flex-none bg-[#000080] hover:bg-[#00005a] text-white font-bold px-5 sm:px-8 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-95 text-sm sm:text-base text-center"
                         >
                             Confirm Order
                         </button>
                         <button
                             onClick={closeModal}
-                            className="text-white hover:text-gray-200 font-semibold px-6 py-2.5 rounded-lg hover:bg-white/10 transition-all duration-200 cursor-pointer text-base"
+                            className="text-white hover:text-gray-200 font-semibold px-4 sm:px-6 py-2.5 rounded-lg hover:bg-white/10 transition-all duration-200 cursor-pointer text-sm sm:text-base"
                         >
                             Cancel
                         </button>
