@@ -22,7 +22,9 @@ export default function SettingsPage() {
     // Dynamic avatar preview URL
     const avatarUrl = image 
         ? URL.createObjectURL(image) 
-        : (userInfo.user?.image || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(firstName || "User")}`);
+        : (userInfo.user?.image && userInfo.user.image !== "/images/default-profile.png"
+            ? userInfo.user.image
+            : "/userGirl.jpg");
 
     const triggerFileInput = () => {
         fileInputRef.current.click();

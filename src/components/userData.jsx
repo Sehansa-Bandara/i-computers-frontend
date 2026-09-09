@@ -33,27 +33,45 @@ export default function UserData() {
     const displayName = isMobile ? firstName : fullName;
 
     const avatarUrl =
-        userData?.user?.image ||
-        `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(displayName || "User")}`;
+        userData?.user?.image && userData.user.image !== "/images/default-profile.png"
+            ? userData.user.image
+            : "/userGirl.jpg";
 
     return (
         <>
             {userData?.user == null ? (
                 <>
-                    <div className="text-white p-2 hidden lg:block text-base">
-                        <Link to="/login" className="hover:underline">Login</Link>
-                        {" | "}
-                        <Link to="/register" className="hover:underline">Register</Link>
+                    <div className="text-white p-2 hidden lg:flex items-center gap-3 text-base">
+                        <Link to="/login" className="flex items-center">
+                            <img
+                                src="/userGirl.jpg"
+                                alt="User"
+                                className="w-[42px] h-[42px] rounded-full border-2 border-white object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                            />
+                        </Link>
+                        <div>
+                            <Link to="/login" className="hover:underline">Login</Link>
+                            {" | "}
+                            <Link to="/register" className="hover:underline">Register</Link>
+                        </div>
                     </div>
                     <Link className="h-full aspect-square flex flex-col items-center justify-center lg:hidden" to="/login">
-                        <CiUser className="text-4xl text-accent" />
-                        <span className="text-accent text-sm">Login</span>
+                        <img
+                            src="/userGirl.jpg"
+                            alt="Login"
+                            className="w-[34px] h-[34px] rounded-full border-2 border-accent object-cover mb-1"
+                        />
+                        <span className="text-accent text-xs">Login</span>
                     </Link>
                 </>
             ) : (
                 <div className="h-full aspect-square flex flex-col justify-center items-center lg:h-auto lg:w-auto lg:flex-row lg:gap-3">
                     <img
                         src={avatarUrl}
+                        onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = "/userGirl.jpg";
+                        }}
                         alt="Avatar"
                         className="w-[34px] h-[34px] lg:w-[42px] lg:h-[42px] rounded-full border-2 border-accent lg:border-white object-cover"
                     />
