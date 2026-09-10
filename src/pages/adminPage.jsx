@@ -1,4 +1,4 @@
-import { Routes, Route, Link, useLocation } from "react-router-dom";
+import { Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
 import { GiShoppingCart } from "react-icons/gi";
 import { BsBox } from "react-icons/bs";
 import { FaRegUser } from "react-icons/fa";
@@ -7,9 +7,19 @@ import AddProductForm from "./admin/adminAddproduct";
 import AdminEditProductForm from "./admin/adminEditProductform";
 import AdminOrdersPage from "./admin/adminOrderPage";
 import AdminUsersPage from "./admin/adminUsers";
+import { useContext } from "react";
+import { UserContext } from "../context/userContext";
+
 
 export default function AdminPage() {
+
+  const userData = useContext(UserContext);
+  const navigate = useNavigate()
   const location = useLocation();
+
+  if (!userData.user || !userData.user.isAdmin) {
+    navigate("/login")
+  }
 
   const isActive = (path) => {
     if (path === "/admin") {

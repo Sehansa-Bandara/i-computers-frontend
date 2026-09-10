@@ -5,6 +5,7 @@ import LoginPage from './pages/loginPage.jsx'
 import RegisterPage from './pages/registerPage.jsx'
 import AdminPage from './pages/adminPage.jsx'
 import TestPage from './pages/testPage.jsx'
+import ResetPasswordPage from './pages/resetPassword.jsx'
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import api from "./lib/api";
@@ -55,6 +56,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/admin/*" element={<AdminPage />} />
           <Route path="/test" element={<TestPage />} />
           <Route path="/*" element={<HomePage user={user} />} />

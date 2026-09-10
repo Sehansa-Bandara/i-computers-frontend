@@ -29,7 +29,7 @@ export default function LoginPage() {
 
                 if (res.data.isAdmin) {
                     // redirect to admin dashboard
-                    navigate("/admin");
+                    navigate("/admin", { replace: true });
                 } else {
                     // redirect to home page
                     navigate("/");
