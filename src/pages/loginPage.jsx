@@ -5,11 +5,20 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import api from "../lib/api";
+import { useGoogleLogin } from "@react-oauth/google";
 
 export default function LoginPage() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const googleLogin = useGoogleLogin({
+        onSuccess: (response) => {
+            console.log(response)
+        },
+        onError: (error) => {
+            console.log(error)
+        }
+    })
     const navigate = useNavigate();
 
     function handleLogin() {
@@ -82,8 +91,8 @@ export default function LoginPage() {
                 </p>
 
 
-                <button className="w-full h-[40px] bg-gray-800 text-white rounded-lg mt-5 hover:bg-gray-700 transition duration-300 flex items-center justify-center gap-2">
-                    <FcGoogle /> Login with Google
+                <button onClick={() => googleLogin()} className="w-full h-[40px] bg-gray-800 text-white rounded-lg mt-5 hover:bg-gray-700 transition duration-300 flex items-center justify-center gap-2">
+                    Login with Google <FcGoogle />
                 </button>
 
             </div>

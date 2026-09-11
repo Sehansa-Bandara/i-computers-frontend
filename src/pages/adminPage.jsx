@@ -7,18 +7,34 @@ import AddProductForm from "./admin/adminAddproduct";
 import AdminEditProductForm from "./admin/adminEditProductform";
 import AdminOrdersPage from "./admin/adminOrderPage";
 import AdminUsersPage from "./admin/adminUsers";
-import { useContext } from "react";
-import { UserContext } from "../context/userContext";
+import { useContext, useEffect } from "react";
+import { UserContext } from "../context/user";
 
 
 export default function AdminPage() {
 
   const userData = useContext(UserContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const location = useLocation();
 
+  useEffect(() => {
+    if (userData.userLoadingFinished) {
+      if (!userData.user || !userData.user.isAdmin) {
+        navigate("/login");
+      }
+    }
+  }, [userData.userLoadingFinished, userData.user, navigate]);
+
+  if (!userData.userLoadingFinished) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-slate-100">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   if (!userData.user || !userData.user.isAdmin) {
-    navigate("/login")
+    return null;
   }
 
   const isActive = (path) => {
