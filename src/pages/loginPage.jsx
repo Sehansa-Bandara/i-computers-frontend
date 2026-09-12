@@ -1,25 +1,55 @@
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-hot-toast";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-
+import { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../lib/api";
 import { useGoogleLogin } from "@react-oauth/google";
+import UserContext from "../context/user";
 
 export default function LoginPage() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const userContext = useContext(UserContext);
+    const navigate = useNavigate();
+
     const googleLogin = useGoogleLogin({
         onSuccess: (response) => {
-            console.log(response)
+            console.log(response);
+            console.log(response.access_token);
+
+            api.post("/users/google", {
+                accessToken: response.access_token
+            }).then(
+                (res) => {
+                    console.log(res);
+                    toast.success("Login successful");
+                    localStorage.setItem("token", res.data.token);
+                    localStorage.setItem("isAdmin", res.data.isAdmin);
+
+                    if (res.data.user && userContext?.setUser) {
+                        userContext.setUser(res.data.user);
+                    }
+
+                    if (res.data.isAdmin) {
+                        navigate("/admin", { replace: true });
+                    } else {
+                        navigate("/", { replace: true });
+                    }
+                }
+            ).catch(
+                (err) => {
+                    console.log(err);
+                    const errorMessage = err.response?.data?.message || "Google login failed";
+                    toast.error(errorMessage);
+                }
+            );
         },
         onError: (error) => {
-            console.log(error)
+            console.log(error);
+            toast.error("Google login failed");
         }
-    })
-    const navigate = useNavigate();
+    });
 
     function handleLogin() {
         api.post("/users/login", {
@@ -35,6 +65,10 @@ export default function LoginPage() {
                 // browser local storage to store the token and isAdmin
                 localStorage.setItem("token", res.data.token);
                 localStorage.setItem("isAdmin", res.data.isAdmin);
+
+                if (res.data.user && userContext?.setUser) {
+                    userContext.setUser(res.data.user);
+                }
 
                 if (res.data.isAdmin) {
                     // redirect to admin dashboard

@@ -136,6 +136,7 @@ export default function SettingsPage() {
                             >
                                 <img 
                                     src={avatarUrl} 
+                                    referrerPolicy="no-referrer"
                                     alt="Profile Avatar" 
                                     className="w-full h-full object-cover"
                                 />

@@ -24,6 +24,11 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
+    if (!token) {
+      setUser(null);
+      setUserLoadingFinished(true);
+      return;
+    }
 
     api
       .get("/users/me", {
@@ -36,7 +41,6 @@ function App() {
         setUserLoadingFinished(true);
       })
       .catch(() => {
-        toast.error("Please login again");
         localStorage.removeItem("token");
         setUser(null);
         setUserLoadingFinished(true);

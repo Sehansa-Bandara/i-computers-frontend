@@ -68,6 +68,7 @@ export default function UserData() {
                 <div className="h-full aspect-square flex flex-col justify-center items-center lg:h-auto lg:w-auto lg:flex-row lg:gap-3">
                     <img
                         src={avatarUrl}
+                        referrerPolicy="no-referrer"
                         onError={(e) => {
                             e.currentTarget.onerror = null;
                             e.currentTarget.src = "/userGirl.jpg";
