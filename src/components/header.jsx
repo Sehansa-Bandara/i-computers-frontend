@@ -27,13 +27,13 @@ export default function Header() {
     return (
         <>
             <header className="w-full h-[90px] bg-accent-blue text-white flex items-center px-6 lg:px-10 justify-between font-semibold text-xl shadow-lg sticky top-0 z-40">
-                {/* Circular Brand Logo */}
-                <Link to="/" className="h-full flex items-center group py-2" title="i-Computers Home">
-                    <div className="w-[66px] h-[66px] rounded-full overflow-hidden border-2 border-cyan-400/80 shadow-[0_0_15px_rgba(34,211,238,0.35)] bg-[#070b19] flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:border-cyan-300 group-hover:shadow-[0_0_22px_rgba(34,211,238,0.6)]">
+                {/* Brand Logo Box */}
+                <Link to="/" className="h-full flex items-center group py-1" title="i-Computers Home">
+                    <div className="w-[82px] h-[82px] rounded-xl overflow-hidden border-2 border-cyan-400/80 shadow-[0_0_16px_rgba(34,211,238,0.4)] bg-[#070b19] flex items-center justify-center p-0.5 transition-all duration-300 group-hover:scale-105 group-hover:border-cyan-300 group-hover:shadow-[0_0_24px_rgba(34,211,238,0.65)]">
                         <img
                             src="/logo.png"
                             alt="i-Computers Logo"
-                            className="w-full h-full object-cover object-[50%_8%] scale-[1.7] cursor-pointer"
+                            className="w-full h-full object-contain cursor-pointer"
                         />
                     </div>
                 </Link>
