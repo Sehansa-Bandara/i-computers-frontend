@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { MdAdd } from "react-icons/md";
 import { CiEdit, CiTrash } from "react-icons/ci";
+import { FiPackage, FiRefreshCw, FiPlus } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import api from "../../lib/api.js";
@@ -303,21 +304,50 @@ export default function AdminProducts() {
 
   return (
     <div className="w-full h-full flex flex-col p-4 overflow-y-auto">
-      <div className="w-full h-[80px] bg-white shadow-md rounded-md flex items-center p-4 justify-between mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">Products</h1>
-
+      {/* Top Header Card */}
+      <div className="w-full bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
-          <span className="text-slate-600 font-medium">{products.length} Products</span>
+          <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 shadow-xs">
+            <FiPackage className="text-2xl" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2.5">
+              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Products</h1>
+              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold">
+                {products.length} Items
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 font-medium">
+              Manage store inventory, catalog specifications, and pricing
+            </p>
+          </div>
+        </div>
+
+        {/* Action Buttons in 2 Distinct Colors */}
+        <div className="flex items-center gap-3">
+          {/* Button 1: Refresh (Amber / Gold) */}
           <button
             onClick={fetchProducts}
-            className="px-3 py-1.5 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-lg text-xs font-semibold transition-all cursor-pointer"
+            disabled={loading}
+            className="px-4 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100/90 text-amber-800 border border-amber-200/90 hover:border-amber-300 text-sm font-semibold transition-all flex items-center gap-2 shadow-xs cursor-pointer active:scale-95 disabled:opacity-60"
+            title="Refresh product list"
           >
-            Refresh
+            <FiRefreshCw className={`text-base text-amber-600 ${loading ? "animate-spin" : ""}`} />
+            <span>Refresh</span>
           </button>
+
+          {/* Button 2: Add Product (Emerald Green) */}
+          <Link
+            to="/admin/addproduct"
+            className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold transition-all flex items-center gap-2 shadow-md shadow-emerald-600/20 hover:shadow-emerald-600/30 active:scale-[0.98] cursor-pointer"
+          >
+            <FiPlus className="text-lg" />
+            <span>Add Product</span>
+          </Link>
         </div>
       </div>
 
-      <div className="w-full bg-white shadow-md rounded-md overflow-hidden">
+      <div className="w-full bg-white border border-slate-200/80 shadow-sm rounded-2xl overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-800 text-white text-center text-sm font-semibold h-[48px]">

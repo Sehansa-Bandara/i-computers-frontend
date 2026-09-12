@@ -6,18 +6,20 @@ import CartPage from "./cartPage";
 import CheckoutPage from "./checkoutPage";
 import MyOrdersPage from "./myOrdersPage";
 import SettingsPage from "./settingsPage";
+import LandingPage from "./landingPage";
+
 
 
 
 
 export default function HomePage() {
 
-    
+
     return (
         <div className="w-full min-h-full bg-primary pb-[80px] lg:pb-0">
             <Header />
             <Routes>
-                <Route path="/" element={<h1>Home Page</h1>} />
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/about" element={<h1>About Page</h1>} />
                 <Route path="/products" element={<ProductPage />} />
                 <Route path="/overview/:productId" element={<ProductOverview />} />
