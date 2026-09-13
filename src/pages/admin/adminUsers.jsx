@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../lib/api";
 import LoadingAnimation from "../../components/loadingAnimation";
 import BlockUserModal from "../../components/blockUserModal";
-import ChangeRoleOfUserModal from "../../components/changeRoleOfUserModal";
+import ChangeRoleOfUserModal from "../../components/ChangeRoleOfUserModal";
 import getFormattedPrice from "../../lib/price-format";
 import {
     FiUsers,
