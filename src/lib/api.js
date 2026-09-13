@@ -1,7 +1,11 @@
 import axios from "axios";
 
+const rawEnv = (import.meta.env.VITE_API_URL || "").trim().replace(/^["']|["']$/g, "");
+const isLocalOrInvalid = !rawEnv || rawEnv.includes("localhost") || rawEnv.includes("192.168.") || rawEnv.includes("127.0.0.1");
+const baseURL = isLocalOrInvalid ? "https://i-compters.onrender.com/api" : rawEnv;
+
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || "https://i-compters.onrender.com/api"
+    baseURL: baseURL
 });
 
 api.interceptors.request.use((config) => {
