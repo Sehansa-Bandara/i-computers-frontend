@@ -20,24 +20,9 @@ export default function ProductOverview() {
     const [quantity, setQuantity] = useState(1);
 
     const productId = params.productId;
-    const token = localStorage.getItem("token");
-    const isAuthenticated = Boolean(token && (userContext?.user || !userContext?.userLoadingFinished));
 
     useEffect(() => {
-        // Enforce login requirement to view product details
-        if (!token) {
-            toast.error("Please log in to view this product");
-            navigate("/login", { state: { from: location.pathname, message: "Please log in to view this product" }, replace: true });
-            return;
-        }
-
-        if (userContext?.userLoadingFinished && !userContext?.user) {
-            toast.error("Please log in to view this product");
-            navigate("/login", { state: { from: location.pathname, message: "Please log in to view this product" }, replace: true });
-            return;
-        }
-
-        if (loading && isAuthenticated) {
+        if (loading) {
             api.get("/products/" + productId).then((response) => {
                 setProduct(response.data);
                 setLoading(false);
@@ -47,7 +32,7 @@ export default function ProductOverview() {
                 setLoading(false);
             });
         }
-    }, [productId, loading, token, userContext?.user, userContext?.userLoadingFinished, navigate, location.pathname, isAuthenticated]);
+    }, [productId, loading]);
 
     const labelledPrice = product?.labelledPrice ?? product?.labledPrice ?? product?.labeledPrice;
     const discountAmount = Number(labelledPrice) > Number(product?.price) 
@@ -56,16 +41,6 @@ export default function ProductOverview() {
     const discountPercent = Number(labelledPrice) > 0 && discountAmount > 0 
         ? Math.round((discountAmount / Number(labelledPrice)) * 100) 
         : 0;
-
-    if (!token || (userContext?.userLoadingFinished && !userContext?.user)) {
-        return (
-            <div className="w-full min-h-[calc(100vh-100px)] flex flex-col items-center justify-center p-6 text-center bg-slate-50">
-                <LoadingAnimation />
-                <p className="mt-4 text-slate-700 font-semibold text-lg">Redirecting to login...</p>
-                <p className="text-slate-500 text-sm mt-1">You must be logged in to view product specifications.</p>
-            </div>
-        );
-    }
 
     return (
         <div className="w-full min-h-[calc(100vh-100px)] bg-slate-50 py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center">

@@ -1,41 +1,19 @@
-import { useState, useEffect, useContext } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import api from "../lib/api";
 import toast from "react-hot-toast";
 import LoadingAnimation from "../components/loadingAnimation";
 import ProductCard from "../components/productCard";
 import { FiRefreshCcw, FiSearch } from "react-icons/fi";
 import { HiOutlineSparkles } from "react-icons/hi2";
-import UserContext from "../context/user";
 
 export default function ProductPage() {
-    const userContext = useContext(UserContext);
-    const navigate = useNavigate();
-    const location = useLocation();
-
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searching, setSearching] = useState(false);
     const [query, setQuery] = useState("");
 
-    const token = localStorage.getItem("token");
-    const isAuthenticated = Boolean(token && (userContext?.user || !userContext?.userLoadingFinished));
-
     useEffect(() => {
-        // Enforce login requirement to view products
-        if (!token) {
-            toast.error("Please log in to view products");
-            navigate("/login", { state: { from: location.pathname, message: "Please log in to view products" }, replace: true });
-            return;
-        }
-
-        if (userContext?.userLoadingFinished && !userContext?.user) {
-            toast.error("Please log in to view products");
-            navigate("/login", { state: { from: location.pathname, message: "Please log in to view products" }, replace: true });
-            return;
-        }
-
-        if (loading && isAuthenticated) {
+        if (loading) {
             api.get("/products").then((response) => {
                 setProducts(response.data);
                 setLoading(false);
@@ -44,7 +22,7 @@ export default function ProductPage() {
                 setLoading(false);
             });
         }
-    }, [loading, token, userContext?.user, userContext?.userLoadingFinished, navigate, location.pathname, isAuthenticated]);
+    }, [loading]);
 
     async function handleSearch(e) {
         if (e) e.preventDefault();
@@ -66,16 +44,6 @@ export default function ProductPage() {
         setQuery("");
         setLoading(true);
     };
-
-    if (!token || (userContext?.userLoadingFinished && !userContext?.user)) {
-        return (
-            <div className="w-full min-h-[calc(100vh-90px)] flex flex-col items-center justify-center p-6 text-center bg-slate-50">
-                <LoadingAnimation />
-                <p className="mt-4 text-slate-700 font-semibold text-lg">Redirecting to login...</p>
-                <p className="text-slate-500 text-sm mt-1">You must be logged in to view products.</p>
-            </div>
-        );
-    }
 
     return (
         <div className="relative w-full min-h-[calc(100vh-90px)] bg-gradient-to-b from-[#e8f4fe] via-[#f4f9ff] to-[#eaf3fe] py-10 px-4 sm:px-6 lg:px-8 overflow-hidden">
