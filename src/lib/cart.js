@@ -82,6 +82,18 @@ export function addToCart(product, qty) {
     localStorage.setItem("cart", cartInString);
 }
 
+export function removeFromCart(productId) {
+    const cart = getCart();
+    const updated = cart.filter((item) => item.product?.productId !== productId);
+    localStorage.setItem("cart", JSON.stringify(updated));
+    return updated;
+}
+
+export function clearCart() {
+    localStorage.setItem("cart", "[]");
+    return [];
+}
+
 export function getCartTotal(cart = getCart()){
     if (!cart || !Array.isArray(cart)) return 0;
     let total = 0;
@@ -92,4 +104,5 @@ export function getCartTotal(cart = getCart()){
 
     return total;
 }
+
 

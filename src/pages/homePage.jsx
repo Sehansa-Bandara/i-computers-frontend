@@ -8,6 +8,7 @@ import MyOrdersPage from "./myOrdersPage";
 import SettingsPage from "./settingsPage";
 import LandingPage from "./landingPage";
 import AboutUs from "./aboutUs";
+import ReviewPage from "./reviewPage";
 
 export default function HomePage() {
 
@@ -18,6 +19,7 @@ export default function HomePage() {
             <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/about" element={<AboutUs />} />
+                <Route path="/reviews" element={<ReviewPage />} />
                 <Route path="/products" element={<ProductPage />} />
                 <Route path="/overview/:productId" element={<ProductOverview />} />
                 <Route path="/cart" element={<CartPage />} />
