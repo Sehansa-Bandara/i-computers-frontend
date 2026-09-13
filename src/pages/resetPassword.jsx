@@ -64,11 +64,11 @@ export default function ResetPasswordPage() {
     }
 
     return (
-        <div className="w-full h-full flex justify-center items-center bg-primary">
+        <div className="w-full min-h-screen flex justify-center items-center bg-primary p-4 py-8">
 
             {
                 isOtpSent ?
-                    <div className="w-[420px] py-8 px-6 bg-white rounded-xl shadow-xl flex flex-col justify-center items-center gap-4">
+                    <div className="w-full max-w-[420px] py-8 px-6 bg-white rounded-xl shadow-xl flex flex-col justify-center items-center gap-4">
                         <h1 className="text-2xl font-bold text-gray-800">Reset Password</h1>
                         <p className="text-sm text-gray-500 text-center">
                             Enter the OTP sent to <span className="font-semibold text-gray-700">{email}</span>
@@ -128,7 +128,7 @@ export default function ResetPasswordPage() {
                             </Link>
                         </div>
                     </div> :
-                    <div className="w-[420px] py-8 px-6 bg-white rounded-xl shadow-xl flex flex-col justify-center items-center gap-4">
+                    <div className="w-full max-w-[420px] py-8 px-6 bg-white rounded-xl shadow-xl flex flex-col justify-center items-center gap-4">
                         <h1 className="text-2xl font-bold text-gray-800">Forgot Password</h1>
                         <p className="text-sm text-gray-500 text-center">
                             Enter your registered email address to receive a one-time verification code (OTP).

@@ -165,14 +165,14 @@ export default function AboutUs() {
         <div className="w-full bg-[#f0f7ff] text-slate-800 min-h-screen">
 
             <section className="relative w-full border-b border-sky-100 py-16 lg:py-24 px-6 lg:px-12 overflow-hidden bg-slate-950">
-                {/* Store Showroom Background Image */}
+
                 <div className="absolute inset-0 z-0">
                     <img
                         src="/images/background1.jpg"
                         alt="i-Computers Showroom"
                         className="w-full h-full object-cover object-center"
                     />
-                    {/* Smooth overlay connecting Header to Hero and Hero to Light Blue Body */}
+
                     <div className="absolute inset-0 bg-gradient-to-b from-blue-950/80 via-slate-900/55 to-[#f0f7ff]" />
                 </div>
 
@@ -211,7 +211,7 @@ export default function AboutUs() {
                         </a>
                     </div>
 
-                    {/* Stats Bar (High contrast clean white cards on the backdrop) */}
+
                     <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
                         {stats.map((item, idx) => {
                             const Icon = item.icon;
@@ -290,7 +290,7 @@ export default function AboutUs() {
                             <div className="space-y-3.5 text-sm">
                                 <div className="flex justify-between py-2 border-b border-sky-50">
                                     <span className="text-slate-500">Location</span>
-                                    <span className="font-semibold text-slate-900">Colombo, Sri Lanka</span>
+                                    <span className="font-semibold text-slate-900">Kurunegala, Sri Lanka</span>
                                 </div>
                                 <div className="flex justify-between py-2 border-b border-sky-50">
                                     <span className="text-slate-500">Products</span>
@@ -311,14 +311,12 @@ export default function AboutUs() {
             </section>
 
             <section className="relative py-16 lg:py-24 border-y border-sky-100 px-6 lg:px-12 overflow-hidden bg-slate-900">
-                {/* Vision & Mission Background Image */}
                 <div className="absolute inset-0 z-0">
                     <img
                         src="/vs.jpg"
                         alt="i-Computers Vision and Strategy"
                         className="w-full h-full object-cover object-center"
                     />
-                    {/* Soft light-blue and white translucent overlay for perfect contrast */}
                     <div className="absolute inset-0 bg-gradient-to-b from-[#eaf4fe]/88 via-sky-50/78 to-[#f4f9ff]/90 backdrop-blur-[1px]" />
                 </div>
 
@@ -365,63 +363,87 @@ export default function AboutUs() {
             </section>
 
 
-            <section className="py-16 lg:py-20 px-6 lg:px-12 max-w-6xl mx-auto">
-                <div className="text-center max-w-2xl mx-auto mb-12">
-                    <span className="inline-block text-xs font-bold text-sky-700 uppercase tracking-wider bg-sky-100/70 px-3 py-1 rounded-md">
-                        Products &amp; Services
-                    </span>
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mt-2">
-                        What We Offer
-                    </h2>
-                    <p className="text-sm sm:text-base text-slate-600 mt-2">
-                        Find everything you need for home, school, gaming, and business computing.
-                    </p>
-                </div>
+            <section className="relative w-full py-18 lg:py-24 border-y border-sky-100 overflow-hidden bg-gradient-to-br from-[#e6f3fe] via-[#f2f8ff] to-[#e1f0fe]">
+                {/* Silky Ambient Glow Spheres for Depth */}
+                <div className="absolute -top-20 -left-20 w-[450px] h-[450px] rounded-full bg-sky-300/30 blur-[110px] pointer-events-none" />
+                <div className="absolute -bottom-20 -right-20 w-[500px] h-[500px] rounded-full bg-blue-400/20 blur-[120px] pointer-events-none" />
+                <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[350px] rounded-full bg-cyan-200/25 blur-[100px] pointer-events-none" />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {offerings.map((item, idx) => {
-                        const Icon = item.icon;
-                        return (
-                            <div
-                                key={idx}
-                                className="bg-white border border-sky-100/80 rounded-2xl p-6 hover:border-sky-300 hover:shadow-md transition-all duration-200 flex flex-col justify-between group"
-                            >
-                                <div>
-                                    <div className="w-12 h-12 rounded-xl bg-sky-50 text-blue-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-105 group-hover:bg-sky-100 transition-all duration-200">
-                                        <Icon />
+                <div className="max-w-6xl mx-auto px-6 lg:px-12 relative z-10">
+                    <div className="text-center max-w-2xl mx-auto mb-12">
+                        <span className="inline-flex items-center gap-2 text-xs font-bold text-sky-800 uppercase tracking-wider bg-white/90 px-3.5 py-1.5 rounded-full border border-sky-200 shadow-xs backdrop-blur-md">
+                            <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
+                            <span>Products &amp; Services</span>
+                        </span>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mt-3 tracking-tight drop-shadow-xs">
+                            What We <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-sky-600 to-cyan-500">Offer</span>
+                        </h2>
+                        <p className="text-sm sm:text-base text-slate-600 mt-3 font-medium">
+                            Find everything you need for home, school, gaming, and business computing.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {offerings.map((item, idx) => {
+                            const Icon = item.icon;
+                            return (
+                                <div
+                                    key={idx}
+                                    className="relative bg-white/95 backdrop-blur-md border border-sky-200/70 rounded-2xl p-6 hover:border-sky-400 shadow-[0_4px_20px_rgba(30,58,138,0.04)] hover:shadow-[0_16px_36px_rgba(2,132,199,0.13)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group overflow-hidden"
+                                >
+                                    {/* Top subtle gradient accent on hover */}
+                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-sky-400 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                                    <div>
+                                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-500 text-white flex items-center justify-center text-xl mb-4 shadow-sm shadow-sky-500/25 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-sky-500/35 transition-all duration-300">
+                                            <Icon />
+                                        </div>
+                                        <h3 className="font-extrabold text-slate-900 text-base sm:text-lg mb-2 group-hover:text-blue-600 transition-colors">
+                                            {item.title}
+                                        </h3>
+                                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                                            {item.description}
+                                        </p>
                                     </div>
-                                    <h3 className="font-bold text-slate-900 text-base mb-2">
-                                        {item.title}
-                                    </h3>
-                                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                                        {item.description}
-                                    </p>
+                                    <div className="mt-6 pt-4 border-t border-sky-100 flex items-center justify-between">
+                                        <Link
+                                            to="/products"
+                                            className="text-xs font-bold text-blue-600 group-hover:text-sky-600 inline-flex items-center gap-1.5 transition-colors"
+                                        >
+                                            <span>View in store</span>
+                                            <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                                        </Link>
+                                        <span className="text-[10px] font-semibold text-sky-700 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-100">
+                                            Official Warranty
+                                        </span>
+                                    </div>
                                 </div>
-                                <div className="mt-6 pt-3 border-t border-sky-50">
-                                    <Link
-                                        to="/products"
-                                        className="text-xs font-bold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1.5"
-                                    >
-                                        <span>View in store</span>
-                                        <span>&rarr;</span>
-                                    </Link>
-                                </div>
-                            </div>
-                        );
-                    })}
+                            );
+                        })}
+                    </div>
                 </div>
             </section>
 
-            <section className="py-16 lg:py-20 bg-gradient-to-b from-[#eaf4fe] to-[#f4f9ff] border-y border-sky-100 px-6 lg:px-12">
-                <div className="max-w-6xl mx-auto">
+            <section className="relative py-16 lg:py-24 border-y border-sky-100 px-6 lg:px-12 overflow-hidden">
+                {/* Customer Benefits Background Image */}
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src="/images/VS2.jpg"
+                        alt="Why Choose i-Computers"
+                        className="w-full h-full object-cover object-center"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-sky-50/20 via-transparent to-sky-100/30" />
+                </div>
+
+                <div className="max-w-6xl mx-auto relative z-10">
                     <div className="text-center max-w-2xl mx-auto mb-12">
-                        <span className="inline-block text-xs font-bold text-sky-700 uppercase tracking-wider bg-white px-3 py-1 rounded-md border border-sky-200">
+                        <span className="inline-block text-xs font-bold text-sky-800 uppercase tracking-wider bg-white/90 px-3.5 py-1 rounded-md border border-sky-200 shadow-xs backdrop-blur-md">
                             Customer Benefits
                         </span>
-                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mt-2">
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mt-2 drop-shadow-xs">
                             Why Choose i-Computers
                         </h2>
-                        <p className="text-sm sm:text-base text-slate-600 mt-2">
+                        <p className="text-sm sm:text-base text-slate-600 mt-2 font-medium">
                             We focus on genuine hardware, clear communication, and reliable support.
                         </p>
                     </div>
@@ -432,9 +454,9 @@ export default function AboutUs() {
                             return (
                                 <div
                                     key={idx}
-                                    className="p-6 rounded-2xl bg-white border border-sky-100 shadow-xs hover:shadow-md hover:border-sky-300 transition-all duration-200"
+                                    className="p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-white/80 shadow-md hover:shadow-xl hover:border-sky-300 hover:bg-white transition-all duration-200"
                                 >
-                                    <div className="w-11 h-11 rounded-xl bg-sky-50 text-blue-600 flex items-center justify-center text-xl mb-3.5">
+                                    <div className="w-11 h-11 rounded-xl bg-sky-50 text-blue-600 flex items-center justify-center text-xl mb-3.5 shadow-2xs">
                                         <Icon />
                                     </div>
                                     <h3 className="font-bold text-slate-900 text-sm sm:text-base mb-1.5">

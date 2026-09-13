@@ -62,6 +62,12 @@ export default function OrderModal(props) {
             return;
         }
 
+        const currentCart = props.cart || getCart();
+        if (!currentCart || currentCart.length === 0) {
+            toast.error("Your cart is empty");
+            return;
+        }
+
         if (!firstName.trim()) {
             toast.error("Please enter your first name");
             return;
@@ -84,24 +90,24 @@ export default function OrderModal(props) {
         }
 
         const orderData = {
-            firstName: firstName,
-            lastName: lastName,
-            addressLine1: addressLine1,
-            addressLine2: addressLine2,
-            city: city,
-            postalCode: postalCode,
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            addressLine1: addressLine1.trim(),
+            addressLine2: addressLine2.trim(),
+            city: city.trim(),
+            postalCode: postalCode.trim() || "00000",
             district: district,
             diliveryFee: diliveryFee,
-            phone: phoneNumber,
-            secondaryPhone: secondaryPhoneNumber,
-            customerNotes: specialNotes,
+            phone: phoneNumber.trim(),
+            secondaryPhone: secondaryPhoneNumber.trim(),
+            customerNotes: specialNotes.trim(),
             items: []
         };
 
-        for (let i = 0; i < props.cart.length; i++) {
+        for (let i = 0; i < currentCart.length; i++) {
             orderData.items.push({
-                productId: props.cart[i].product.productId,
-                qty: props.cart[i].qty
+                productId: currentCart[i].product.productId,
+                qty: currentCart[i].qty
             });
         }
 
@@ -112,24 +118,32 @@ export default function OrderModal(props) {
                 }
             });
 
-            toast.success("Order placed successfully");
+            // Clear the cart on successful order
+            localStorage.setItem("cart", "[]");
+
+            toast.success("Order placed successfully!");
             setModalIsOpen(false);
-            navigate("/products");
+            navigate("/my-orders");
         } catch (err) {
-            console.log(err);
-            toast.error("Failed to place order");
+            console.error("Order placement error:", err);
+            const errMsg = err.response?.data?.message || "Failed to place order";
+            toast.error(errMsg);
         }
     }
     
 
     return (
         <>
-            <button
-                onClick={openModal}
-                className="bg-accent-blue/80 hover:bg-accent transition-colors duration-300 text-white px-6 py-2.5 rounded-md font-semibold cursor-pointer"
-            >
-                Order
-            </button>
+            {props.renderTrigger ? (
+                props.renderTrigger(openModal)
+            ) : (
+                <button
+                    onClick={openModal}
+                    className={props.buttonClassName || "bg-accent-blue/80 hover:bg-accent transition-colors duration-300 text-white px-6 py-2.5 rounded-md font-semibold cursor-pointer"}
+                >
+                    {props.buttonText || "Order"}
+                </button>
+            )}
 
             <Modal
                 isOpen={modalIsOpen}

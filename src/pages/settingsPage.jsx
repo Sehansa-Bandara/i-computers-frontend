@@ -1,5 +1,6 @@
-import { useContext, useState, useRef } from "react";
-import { FiUser, FiLock, FiCamera, FiMail, FiCheck, FiShield } from "react-icons/fi";
+import { useContext, useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { FiUser, FiLock, FiCamera, FiMail, FiCheck, FiShield, FiCheckCircle } from "react-icons/fi";
 import UserContext from "../context/user";
 import uploadMedia from "../lib/uploadMedia";
 import api from "../lib/api";
@@ -8,9 +9,10 @@ import toast from "react-hot-toast";
 
 export default function SettingsPage() {
     const userInfo = useContext(UserContext);
+    const navigate = useNavigate();
 
-    const [firstName, setFirstName] = useState(userInfo.user?.firstName || "");
-    const [lastName, setLastName] = useState(userInfo.user?.lastName || "");
+    const [firstName, setFirstName] = useState(userInfo.user?.firstName || userInfo.user?.firstname || "");
+    const [lastName, setLastName] = useState(userInfo.user?.lastName || userInfo.user?.lastname || "");
     const [image, setImage] = useState(null);
 
     const [password, setPassword] = useState("");
@@ -18,6 +20,21 @@ export default function SettingsPage() {
 
     const [isLoading, setIsLoading] = useState(false);
     const fileInputRef = useRef(null);
+
+    // Auth guard & User data synchronization
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            toast.error("Please log in to access account settings");
+            navigate("/login", { replace: true });
+            return;
+        }
+
+        if (userInfo.user) {
+            setFirstName(userInfo.user.firstName || userInfo.user.firstname || "");
+            setLastName(userInfo.user.lastName || userInfo.user.lastname || "");
+        }
+    }, [userInfo.user, navigate]);
 
     // Dynamic avatar preview URL
     const avatarUrl = image 
@@ -53,10 +70,19 @@ export default function SettingsPage() {
                     }
                 });
 
+                if (userInfo.setUser && userInfo.user) {
+                    userInfo.setUser({
+                        ...userInfo.user,
+                        firstName: firstName,
+                        lastName: lastName,
+                        image: data.image
+                    });
+                }
+
                 toast.success("Profile updated successfully!");
                 setTimeout(() => {
                     window.location.reload();
-                }, 1000);
+                }, 800);
 
             } catch (err) {
                 console.log(err);
@@ -106,15 +132,28 @@ export default function SettingsPage() {
 
     return (
         <div className="min-h-[calc(100vh-100px)] w-full bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 py-10 px-4 md:px-8 flex flex-col items-center">
-            {/* Header Section */}
-            <div className="w-full max-w-5xl mb-8 text-center md:text-left">
-                <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight flex items-center justify-center md:justify-start gap-2">
-                    <FiShield className="text-accent" />
-                    Account Settings
-                </h1>
-                <p className="text-slate-500 mt-2 text-base">
-                    Update your profile information and manage your security settings.
-                </p>
+            {/* Header Section with User Profile Banner */}
+            <div className="w-full max-w-5xl mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-slate-200/80 shadow-md">
+                <div>
+                    <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight flex items-center gap-2">
+                        <FiShield className="text-accent" />
+                        Account &amp; Profile Settings
+                    </h1>
+                    <p className="text-slate-500 mt-1.5 text-sm sm:text-base">
+                        Signed in as <span className="font-bold text-blue-700">{firstName ? `${firstName} ${lastName}`.trim() : (userInfo.user?.email || "Valued User")}</span>
+                    </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
+                        <FiCheckCircle className="text-emerald-500" />
+                        {userInfo.user?.isAdmin ? "Administrator" : "Active Member"}
+                    </span>
+                    {userInfo.user?.email && (
+                        <span className="text-xs text-slate-500 font-mono bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200">
+                            {userInfo.user.email}
+                        </span>
+                    )}
+                </div>
             </div>
 
             {/* Grid Layout */}

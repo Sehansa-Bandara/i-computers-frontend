@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { HiShoppingCart } from "react-icons/hi";
 import UserData from "./userData";
-import { CiHome, CiBoxList, CiPhone, CiShoppingCart } from "react-icons/ci";
+import { CiHome, CiBoxList, CiPhone, CiShoppingCart, CiStar } from "react-icons/ci";
 
 export default function Header() {
     const location = useLocation();
@@ -18,6 +18,11 @@ export default function Header() {
             isActive: (pathname) => pathname === "/products" || pathname.startsWith("/overview"),
         },
         {
+            name: "Reviews",
+            path: "/reviews",
+            isActive: (pathname) => pathname === "/reviews",
+        },
+        {
             name: "About Us",
             path: "/about",
             isActive: (pathname) => pathname === "/about",
@@ -26,10 +31,10 @@ export default function Header() {
 
     return (
         <>
-            <header className="w-full h-[90px] bg-accent-blue text-white flex items-center px-6 lg:px-10 justify-between font-semibold text-xl shadow-lg sticky top-0 z-40">
+            <header className="w-full h-[70px] sm:h-[80px] lg:h-[90px] bg-accent-blue text-white flex items-center px-4 sm:px-6 lg:px-10 justify-between font-semibold text-xl shadow-lg sticky top-0 z-40">
                 {/* Brand Logo Box */}
                 <Link to="/" className="h-full flex items-center group py-1" title="i-Computers Home">
-                    <div className="w-[82px] h-[82px] rounded-xl overflow-hidden border-2 border-cyan-400/80 shadow-[0_0_16px_rgba(34,211,238,0.4)] bg-[#070b19] flex items-center justify-center p-0.5 transition-all duration-300 group-hover:scale-105 group-hover:border-cyan-300 group-hover:shadow-[0_0_24px_rgba(34,211,238,0.65)]">
+                    <div className="w-[58px] h-[58px] sm:w-[70px] sm:h-[70px] lg:w-[82px] lg:h-[82px] rounded-xl overflow-hidden border-2 border-cyan-400/80 shadow-[0_0_16px_rgba(34,211,238,0.4)] bg-[#070b19] flex items-center justify-center p-0.5 transition-all duration-300 group-hover:scale-105 group-hover:border-cyan-300 group-hover:shadow-[0_0_24px_rgba(34,211,238,0.65)]">
                         <img
                             src="/logo.png"
                             alt="i-Computers Logo"
@@ -37,6 +42,18 @@ export default function Header() {
                         />
                     </div>
                 </Link>
+
+                {/* Mobile Header Brand Label */}
+                <div className="flex lg:hidden items-center">
+                    <span className="text-lg font-black tracking-wide bg-gradient-to-r from-cyan-300 to-white bg-clip-text text-transparent">
+                        i-Computers
+                    </span>
+                </div>
+
+                {/* Mobile Header Right Profile / Login */}
+                <div className="flex lg:hidden items-center">
+                    <UserData isMobileHeader={true} />
+                </div>
 
                 {/* Desktop Navigation Tabs with Active Underline */}
                 <nav className="h-full hidden lg:flex items-center gap-8">
@@ -78,7 +95,7 @@ export default function Header() {
             </header>
 
             {/* Mobile Bottom Navigation Bar */}
-            <div className="fixed bottom-0 flex lg:hidden w-screen h-[75px] z-30 bg-white shadow-2xl shadow-black justify-evenly border-t border-gray-100">
+            <div className="fixed bottom-0 flex lg:hidden w-full left-0 right-0 h-[68px] sm:h-[75px] z-30 bg-white/95 backdrop-blur-md shadow-[0_-4px_20px_rgba(0,0,0,0.1)] justify-evenly items-center border-t border-gray-200/80">
                 <Link
                     className={`h-full aspect-square flex flex-col items-center justify-center transition-colors ${
                         location.pathname === "/" ? "text-blue-700 font-semibold" : "text-gray-500"
@@ -101,6 +118,19 @@ export default function Header() {
                     <CiBoxList className="text-3xl" />
                     <span className="text-xs mt-0.5">Products</span>
                     {location.pathname === "/products" && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-700 mt-0.5" />
+                    )}
+                </Link>
+
+                <Link
+                    className={`h-full aspect-square flex flex-col items-center justify-center transition-colors ${
+                        location.pathname === "/reviews" ? "text-blue-700 font-semibold" : "text-gray-500"
+                    }`}
+                    to="/reviews"
+                >
+                    <CiStar className="text-3xl" />
+                    <span className="text-xs mt-0.5">Reviews</span>
+                    {location.pathname === "/reviews" && (
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-700 mt-0.5" />
                     )}
                 </Link>
